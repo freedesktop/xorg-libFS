@@ -498,9 +498,10 @@ _FSReadPad(svr, data, size)
 	if (bytes_read > 0) {
 	    size -= bytes_read;
 	    if (iov[0].iov_len < bytes_read) {
-		iov[1].iov_len += iov[0].iov_len - bytes_read;
+		int pad_bytes_read = bytes_read - iov[0].iov_len;
+		iov[1].iov_len -=  pad_bytes_read;
 		iov[1].iov_base =
-		    (char *)iov[1].iov_base +bytes_read - iov[0].iov_len;
+		    (char *)iov[1].iov_base + pad_bytes_read;
 		iov[0].iov_len = 0;
 	    } else {
 		iov[0].iov_len -= bytes_read;
