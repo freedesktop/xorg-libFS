@@ -1,3 +1,4 @@
+/* $XdotOrg: xc/lib/FS/FSlibos.h,v 1.1.4.3.4.1 2004/03/04 17:46:25 eich Exp $ */
 /* $Xorg: FSlibos.h,v 1.4 2001/02/09 02:03:25 xorgcvs Exp $ */
 
 /* @(#)FSlibos.h	4.1	91/05/02
@@ -60,6 +61,10 @@ in this Software without prior written authorization from The Open Group.
 #include <X11/Xosdefs.h>
 
 #ifndef WIN32
+
+#if defined(SCO) || defined(__USLC__)
+#include <stdint.h>	/* For SIZE_MAX */
+#endif
 
 /*
  * makedepend screws up on #undef OPEN_MAX, so we define a new symbol
