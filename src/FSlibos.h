@@ -50,6 +50,7 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
+/* $XFree86: xc/lib/FS/FSlibos.h,v 3.9 2002/05/31 18:45:39 dawes Exp $ */
 
 /*
  * FSlib networking & os include file
@@ -87,18 +88,30 @@ in this Software without prior written authorization from The Open Group.
 #ifdef NOFILE
 #define OPEN_MAX NOFILE
 #else
+#if !defined(__UNIXOS2__) && !defined(__QNX__)
+#ifdef __GNU__
+#define OPEN_MAX (sysconf(_SC_OPEN_MAX))
+#else /* !__GNU__ */
 #define OPEN_MAX NOFILES_MAX
+#endif /* __GNU__ */
+#else /* !__UNIXOS2__ && !__QNX__ */
+#define OPEN_MAX 256
+#endif /* __UNIXOS2__ */
 #endif
 #endif
 #endif
 #endif
 #endif
 
+#ifdef __GNU__
+#define FS_OPEN_MAX 256
+#else /*!__GNU__*/
 #if OPEN_MAX > 256
 #define FS_OPEN_MAX 256
 #else
 #define FS_OPEN_MAX OPEN_MAX
 #endif
+#endif /*__GNU__*/
 
 #endif /* FS_OPEN_MAX */
 
@@ -243,18 +256,8 @@ typedef fd_set FdSet;
 #endif
 
 #include <X11/Xtrans.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #include <string.h>
-#else
-char *malloc(), *realloc(), *calloc();
-void exit();
-#ifdef SYSV
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-#endif
 
 /*
  * The following definitions can be used for locking requests in multi-threaded

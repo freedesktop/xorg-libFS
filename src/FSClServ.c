@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSClServ.c,v 1.5 2001/12/14 19:53:32 dawes Exp $ */
 
 /*
 
@@ -51,6 +52,7 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
+#include	"FSlib.h"
 #include	"FSlibint.h"
 
 extern FSServer *_FSHeadOfServerList;
@@ -62,9 +64,6 @@ FSCloseServer(svr)
     _FSExtension *ext;
     FSServer    **sv = &_FSHeadOfServerList;
     FSServer     *s = _FSHeadOfServerList;
-    extern void _FSFreeQ();
-    extern void _FSDisconnectServer();
-    extern int	FSSync();
 
     svr->flags |= FSlibServerClosing;
     (void) FSSync(svr, 1);	/* throw out pending events */

@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSOpenServ.c,v 1.6 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
 
@@ -65,11 +66,9 @@ static fsReq _dummy_request = {
     0, 0, 0
 };
 
-FSServer   *_FSHeadOfServerList = NULL;
+static void OutOfMemory ( FSServer *svr, char *setup );
 
-extern Bool _FSWireToEvent();
-extern Status _FSUnknownNativeEvent();
-extern Bool _FSUnknownWireEvent();
+FSServer   *_FSHeadOfServerList = NULL;
 
 void _FSFreeServerStructure(svr)
     FSServer   *svr;
@@ -90,7 +89,6 @@ void OutOfMemory(svr, setup)
     FSServer   *svr;
     char       *setup;
 {
-    extern void _FSDisconnectServer();
 
     _FSDisconnectServer(svr->trans_conn);
     _FSFreeServerStructure(svr);
@@ -121,11 +119,6 @@ FSOpenServer(server)
     int         altlen;
     char       *vendor_string;
     long        setuplength;
-    extern void  _FSSendClientPrefix();
-    extern XtransConnInfo _FSConnectServer();
-#ifdef X_NOT_STDC_ENV
-    extern char *getenv();
-#endif
 
     if (server == NULL || *server == '\0') {
 	if ((server = getenv("FONTSERVER")) == NULL) {
@@ -192,7 +185,7 @@ FSOpenServer(server)
 	}
 	bcopy(ad, alts[i].name, altlen);
 	alts[i].name[altlen] = '\0';
-	ad += altlen + (4 - (altlen + 2) & 3);
+	ad += altlen + ((4 - (altlen + 2)) & 3);
     }
     FSfree((char *) alt_data);
 

@@ -50,6 +50,7 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
+/* $XFree86: xc/lib/FS/FSlibInt.c,v 3.10 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
  *	FSlibInt.c - Internal support routines for the C subroutine
@@ -59,7 +60,8 @@ in this Software without prior written authorization from The Open Group.
 #include "FSlibint.h"
 #include <X11/Xos.h>
 
-static void _EatData32();
+static void _EatData32 ( FSServer *svr, unsigned long n );
+static char * _SysErrorMsg ( int n );
 
 /* check for both EAGAIN and EWOULDBLOCK, because some supposedly POSIX
  * systems are broken and return EWOULDBLOCK when they should return EAGAIN
@@ -81,7 +83,11 @@ static void _EatData32();
 #define ECHECK(err) (WSAGetLastError() == err)
 #define ESET(val) WSASetLastError(val)
 #else
+#ifdef ISC
+#define ECHECK(err) ((errno == err) || ETEST())
+#else
 #define ECHECK(err) (errno == err)
+#endif
 #define ESET(val) errno = val
 #endif
 
@@ -271,19 +277,37 @@ _FSRead(svr, data, size)
     register long size;
 {
     register long bytes_read;
+#if defined(SVR4) && defined(i386)
+    int	num_failed_reads = 0;
+#endif
 
     if (size == 0)
 	return;
     ESET(0);
+    /*
+     * For SVR4 with a unix-domain connection, ETEST() after selecting
+     * readable means the server has died.  To do this here, we look for
+     * two consecutive reads returning ETEST().
+     */
     while ((bytes_read = _FSTransRead(svr->trans_conn, data, (int) size))
 	    != size) {
 
 	if (bytes_read > 0) {
 	    size -= bytes_read;
 	    data += bytes_read;
+#if defined(SVR4) && defined(i386)
+	    num_failed_reads = 0;
+#endif
 	}
 	else if (ETEST()) {
 	    _FSWaitForReadable(svr);
+#if defined(SVR4) && defined(i386)
+	    num_failed_reads++;
+	    if (num_failed_reads > 1) {
+		ESET(EPIPE);
+		(*_FSIOErrorFunction) (svr);
+	    }
+#endif
 	    ESET(0);
 	}
 #ifdef SUNSYSV
@@ -300,6 +324,10 @@ _FSRead(svr, data, size)
 	    /* If it's a system call interrupt, it's not an error. */
 	    if (!ECHECK(EINTR))
 		(*_FSIOErrorFunction) (svr);
+#if defined(SVR4) && defined(i386)
+	    else
+		num_failed_reads = 0;
+#endif
 	}
     }
 }
@@ -922,6 +950,7 @@ _SysErrorMsg(n)
  * _FSDefaultIOError - Default fatal system error reporting routine.  Called
  * when an X internal system error is encountered.
  */
+int
 _FSDefaultIOError(svr)
     FSServer   *svr;
 {
@@ -944,6 +973,7 @@ _FSDefaultIOError(svr)
 	"      The connection was probably broken by a server shutdown.\r\n");
     }
     exit(1);
+    /* NOTREACHED */
 }
 
 /*
@@ -986,8 +1016,6 @@ _FSPrintDefaultError(svr, event, fp)
     char        number[32];
     char       *mtype = "FSlibMessage";
     register _FSExtension *ext = (_FSExtension *) NULL;
-    extern int	FSGetErrorText();
-    extern int	FSGetErrorDatabaseText();
 
     (void) FSGetErrorText(svr, event->error_code, buffer, BUFSIZ);
     (void) FSGetErrorDatabaseText(svr, mtype, "FSError", "FS Error", mesg, 
@@ -1046,8 +1074,9 @@ _FSDefaultError(svr, event)
     /* NOTREACHED */
 }
 
-int         (*_FSIOErrorFunction) () = _FSDefaultIOError;
-int         (*_FSErrorFunction) () = _FSDefaultError;
+
+FSIOErrorHandler _FSIOErrorFunction = _FSDefaultIOError;
+FSErrorHandler _FSErrorFunction = _FSDefaultError;
 
 /*
  * This routine can be used to (cheaply) get some memory within a single
@@ -1254,7 +1283,9 @@ _FSFreeQ()
 }
 
 #ifdef _POSIX_SOURCE                     /* stupid makedepend [need if] */
+#ifndef __QNX__ /* QNX's uname nodename entry is not same as tcpip hostname */
 #define NEED_UTSNAME
+#endif
 #endif
 #ifdef hpux
 #define NEED_UTSNAME

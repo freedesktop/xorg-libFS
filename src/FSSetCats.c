@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSSetCats.c,v 1.5 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
 
@@ -59,9 +60,9 @@ FSSetCatalogues(svr, num, cats)
     int         num;
     char      **cats;
 {
-    unsigned char nbytes;
+    int         nbytes;
     fsSetCataloguesReq *req;
-    unsigned char buf[256];
+    char        buf[256];
     int         i;
     int         len, tlen, tnum;
 
@@ -79,7 +80,7 @@ FSSetCatalogues(svr, num, cats)
     for (i = 0; i < num; i++) {
 	nbytes = strlen(cats[i]);
 	if (nbytes < 256) {
-	    buf[0] = (unsigned char) nbytes;
+	    buf[0] = nbytes;
 	    memcpy(&buf[1], cats[i], nbytes);
 	    nbytes++;
 	    _FSSend(svr, buf, (long) nbytes);

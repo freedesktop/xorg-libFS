@@ -50,11 +50,12 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
+/* $XFree86: xc/lib/FS/FSlibint.h,v 3.7 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
  * FSlib internal decls
  */
-
+#include <stdio.h>
 #ifdef USG
 #ifndef __TYPES__
 #include <sys/types.h>			/* forgot to protect it... */
@@ -74,31 +75,46 @@ in this Software without prior written authorization from The Open Group.
 #include	"FSproto.h"
 #include	"FSlibos.h"
 #include	<errno.h>
+#include	<stddef.h>
 
-#ifndef NULL
-#define NULL 0
-#endif
+typedef int (* FSIOErrorHandler)(FSServer *);
+typedef int (* FSErrorHandler)(FSServer *, FSErrorEvent *);
 
-#ifdef X_NOT_STDC_ENV
-extern int  errno;		/* Internal system error number. */
-#endif
+extern FSIOErrorHandler _FSIOErrorFunction;
+extern FSErrorHandler _FSErrorFunction;
 
-extern int	(*_FSIOErrorFunction) ();
-extern int	(*_FSErrorFunction) ();
+extern void _FSEatData ( FSServer *svr, unsigned long n );
+extern void _FSWaitForWritable ( FSServer *svr );
+extern void _FSWaitForReadable ( FSServer *svr );
+extern void _FSFlush ( FSServer *svr );
+extern void _FSRead ( FSServer *svr, char *data, long size );
+extern void _FSReadEvents ( FSServer *svr );
+extern void _FSReadPad ( FSServer *svr, char *data, long size );
+extern void _FSSend ( FSServer *svr, char *data, long size );
+extern void _FSEnq ( FSServer *svr, fsEvent *event );
+extern void _FSFreeServerStructure ( FSServer *svr );
+extern int _FSError ( FSServer *svr, fsError *rep );
+extern int _FSReply ( FSServer *svr, fsReply *rep, int extra, int discard );
+extern XtransConnInfo _FSConnectServer ( char *server_name );
+extern void _FSDisconnectServer ( XtransConnInfo trans_conn );
+extern void _FSSendClientPrefix ( FSServer *svr, fsConnClientPrefix *client );
+extern int _FSEventsQueued ( FSServer *svr, int mode );
+extern unsigned long _FSSetLastRequestRead ( FSServer *svr, 
+					     fsGenericReply *rep );
+extern int _FSUnknownWireEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
+extern int _FSUnknownNativeEvent ( FSServer *svr, FSEvent *re, 
+				   fsEvent *event );
+extern int _FSWireToEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
+extern int _FSDefaultIOError ( FSServer *svr );
+extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event, 
+				  FILE *fp );
+extern int _FSDefaultError ( FSServer *svr, FSErrorEvent *event );
+extern char * _FSAllocScratch ( FSServer *svr, unsigned long nbytes );
+extern void _FSFreeQ ( void );
+extern int _FSGetHostname ( char *buf, int maxlen );
 
-extern void	_FSEatData();
-extern void 	_FSWaitForWritable();
-extern void	_FSWaitForReadable();
-extern void	_FSFlush();
-extern void	_FSRead();
-extern void	_FSReadEvents();
-extern void	_FSReadPad();
-extern void	_FSSend();
-extern void	_FSEnq();
-extern void	_FSFreeServerStructure();
-extern int	_FSError();
-extern int	_FSTransGetConnectionNumber();
-extern Status	_FSReply();
+extern FSErrorHandler  FSSetErrorHandler ( FSErrorHandler handler );
+extern FSIOErrorHandler FSSetIOErrorHandler ( FSIOErrorHandler handler );
 
 #ifndef BUFSIZE
 #define BUFSIZE 2048		/* FS output buffer size. */
@@ -141,7 +157,7 @@ extern Status	_FSReply();
  *
  */
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetReq(name, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req)) > svr->bufmax)\
@@ -168,7 +184,7 @@ extern Status	_FSReply();
 /* GetReqExtra is the same as GetReq, but allocates "n" additional
    bytes after the request. "n" must be a multiple of 4!  */
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetReqExtra(name, n, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req) + n) > svr->bufmax)\
@@ -197,7 +213,7 @@ extern Status	_FSReply();
  * "rid" is the name of the resource.
  */
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetResReq(name, rid, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax)\
@@ -226,7 +242,7 @@ extern Status	_FSReply();
  * at all.
  */
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetEmptyReq(name, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax)\
@@ -336,7 +352,7 @@ extern void Data();
 				 * don't line up with proto */
 
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#if !defined(UNIXCPP) || defined(ANSICPP)
 #define FSCat(x,y) x##_##y
 #else
 #define FSCat(x,y) x/**/_/**/y
