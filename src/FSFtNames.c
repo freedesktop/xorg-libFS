@@ -1,5 +1,4 @@
 /* $Xorg: FSFtNames.c,v 1.4 2001/02/09 02:03:25 xorgcvs Exp $ */
-
 /*
  * Copyright 1990 Network Computing Devices;
  * Portions Copyright 1987 by Digital Equipment Corporation
@@ -24,6 +23,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSFtNames.c,v 1.6 2003/10/23 15:23:24 tsi Exp $ */
 
 /*
 
@@ -78,7 +78,8 @@ FSListFonts(svr, pattern, maxNames, actualCount)
 	  (SIZEOF(fsListFontsReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
 	return (char **) 0;
 
-    if (rep.nFonts) {
+    if (rep.nFonts && rep.nFonts <= SIZE_MAX / sizeof(char *)
+	&& rep.length <= (SIZE_MAX >> 2)) {
 	flist = (char **) FSmalloc((unsigned) rep.nFonts * sizeof(char *));
 	rlen = (rep.length << 2) - SIZEOF(fsListFontsReply);
 	c = (char *) FSmalloc((unsigned) (rlen + 1));
