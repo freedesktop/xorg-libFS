@@ -23,7 +23,8 @@
  * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, 
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
- */
+*/
+/* $XFree86: xc/lib/FS/FSErrHndlr.c,v 1.5 2001/12/14 19:53:32 dawes Exp $ */
 
 /*
 
@@ -53,14 +54,10 @@ in this Software without prior written authorization from The Open Group.
 
 #include	"FSlibint.h"
 
-extern int  _FSDefaultError();
-extern int  _FSDefaultIOError();
-
-int         (*
-	     FSSetErrorHandler(handler)) ()
-    int         (*handler) ();
+FSErrorHandler 
+FSSetErrorHandler(FSErrorHandler handler)
 {
-    int         (*oldhandler) () = _FSErrorFunction;
+    FSErrorHandler oldhandler = _FSErrorFunction;
 
     if (handler != NULL) {
 	_FSErrorFunction = handler;
@@ -70,13 +67,10 @@ int         (*
     return oldhandler;
 }
 
-extern int  _FSIOError();
-
-int         (*
-	     FSSetIOErrorHandler(handler)) ()
-    int         (*handler) ();
+FSIOErrorHandler 
+FSSetIOErrorHandler(FSIOErrorHandler handler)
 {
-    int         (*oldhandler) () = _FSIOErrorFunction;
+    FSIOErrorHandler oldhandler = _FSIOErrorFunction;
 
     if (handler != NULL) {
 	_FSIOErrorFunction = handler;

@@ -50,6 +50,7 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
+/* $XFree86: xc/lib/FS/FSConnServ.c,v 3.11 2001/12/14 19:53:32 dawes Exp $ */
 
 #include	<stdio.h>
 #include	"FSlibint.h"
@@ -60,7 +61,11 @@ in this Software without prior written authorization from The Open Group.
 #ifdef WIN32
 #define ECHECK(err) (WSAGetLastError() == err)
 #else
+#ifdef ISC
+#define ECHECK(err) ((errno == err) || errno == EAGAIN || errno == EWOULDBLOCK)
+#else
 #define ECHECK(err) (errno == err)
+#endif
 #endif
 
 /*
@@ -74,7 +79,7 @@ XtransConnInfo
 _FSConnectServer(server_name)
     char       *server_name;
 {
-    XtransConnInfo trans_conn;		/* transport connection object */
+    XtransConnInfo trans_conn = NULL;	/* transport connection object */
     int retry, connect_stat;
     int  madeConnection = 0;
 
@@ -134,8 +139,7 @@ _FSDisconnectServer(trans_conn)
     (void) _FSTransClose(trans_conn);
 }
 
-#undef NULL
-#define NULL ((char *) 0)
+
 /*
  * This is an OS dependent routine which:
  * 1) returns as soon as the connection can be written on....

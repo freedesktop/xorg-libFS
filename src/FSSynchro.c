@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSSynchro.c,v 1.5 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
 
@@ -51,23 +52,20 @@ in this Software without prior written authorization from The Open Group.
 
 */
 
+#include	"FSlib.h"
 #include	"FSlibint.h"
 
 static int
-_FSSyncFunction(svr)
-    FSServer     *svr;
+_FSSyncFunction(FSServer *svr)
 {
-    extern int FSSync();
 
     return FSSync(svr, 0);
 }
 
-int
-(* FSSynchronize(svr, onoff)) ()
-    FSServer     *svr;
-    int         onoff;
+FSSyncHandler 
+FSSynchronize(FSServer *svr, int onoff)
 {
-    int         (*temp) ();
+    FSSyncHandler temp;
 
     temp = svr->synchandler;
     if (onoff)
@@ -77,12 +75,12 @@ int
     return temp;
 }
 
-int
-(* FSSetAfterFunction(svr, func)) ()
+FSSyncHandler 
+FSSetAfterFunction(svr, func)
     FSServer     *svr;
-    int         (*func) ();
+    FSSyncHandler func;
 {
-    int         (*temp) ();
+    FSSyncHandler temp;
 
     temp = svr->synchandler;
     svr->synchandler = func;

@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSlib.h,v 1.7 2001/12/19 21:37:29 dawes Exp $ */
 
 /*
 
@@ -58,7 +59,10 @@ in this Software without prior written authorization from The Open Group.
 #ifndef _FSLIB_H_
 #define _FSLIB_H_
 
+#include	<X11/Xfuncproto.h>
+
 #include	<X11/fonts/FS.h>
+#include	<X11/fonts/FSproto.h>
 
 #define	Bool	int
 #define	Status	int
@@ -91,7 +95,7 @@ typedef struct _alternate {
 typedef struct _FSExtData {
     int         number;		/* number returned by FSRegisterExtension */
     struct _FSExtData *next;	/* next item on list of data for structure */
-    int         (*free_private) ();	/* called to free private storage */
+    int         (*free_private) (char *); /* called to free private storage */
     char       *private_data;	/* data private to this extension. */
 }           FSExtData;
 
@@ -103,19 +107,23 @@ typedef struct {		/* public to extension, cannot be changed */
     int         first_error;	/* first error number for the extension */
 }           FSExtCodes;
 
+typedef struct _FSServer FSServer;
+typedef union _FSEvent FSEvent;
+
 typedef struct _FSExtent {
     struct _FSExtent *next;	/* next in list */
     FSExtCodes  codes;		/* public information, all extension told */
-    int         (*close_server) ();	/* routine to call when connection
+    int         (*close_server) (FSServer *, FSExtCodes *);	/* routine to call when connection
 					 * closed */
-    int         (*error) ();	/* who to call when an error occurs */
-    int         (*error_string) ();	/* routine to supply error string */
+    int         (*error) (FSServer *, fsError *, FSExtCodes *, int *);	/* who to call when an error occurs */
+    int         (*error_string) (FSServer *, int, FSExtCodes *, char *, int);	/* routine to supply error string */
     char       *name;
 }           _FSExtension;
 
+typedef int (*FSSyncHandler)(FSServer *);
 
 /* server data structure */
-typedef struct _FSServer {
+struct _FSServer {
     struct _FSServer *next;
     int         fd;
     int         proto_version;
@@ -141,14 +149,14 @@ typedef struct _FSServer {
     FSExtData  *ext_data;
     _FSExtension *ext_procs;
     int         ext_number;
-    Bool        (*event_vec[132]) ();
-                Status(*wire_vec[132]) ();
+    Bool        (*event_vec[132]) (FSServer *, FSEvent *, fsEvent *);
+    Status	(*wire_vec[132]) (FSServer *, FSEvent *, fsEvent *);
     char       *scratch_buffer;
     unsigned long scratch_length;
-    int         (*synchandler) ();
+    FSSyncHandler synchandler;
     unsigned long flags;
     struct _XtransConnInfo *trans_conn; /* transport connection object */
-}           FSServer;
+};
 
 typedef struct {
     int         type;
@@ -167,10 +175,10 @@ typedef struct {
     unsigned char minor_code;
 }           FSErrorEvent;
 
-typedef union _FSEvent {
+union _FSEvent {
     int         type;
     FSAnyEvent  fsany;
-}           FSEvent;
+};
 
 typedef struct _FSQEvent {
     struct _FSQEvent *next;
@@ -232,25 +240,74 @@ typedef struct _FSXFontInfoHeader {
 } FSXFontInfoHeader;
 
 
+
 /* function decls */
 
-FSServer   *FSOpenServer();
+_XFUNCPROTOBEGIN
 
-extern int  (*FSSynchronize()) ();
-extern int  (*FSSetAfterFunction()) ();
+extern FSServer * FSOpenServer ( char *server );
 
-char       *FSServerName();
-char      **FSListExtensions();
-Bool        FSQueryExtension();
+extern FSSyncHandler FSSynchronize(FSServer *, int);
+extern FSSyncHandler FSSetAfterFunction(FSServer *, FSSyncHandler);
 
-char      **FSListCatalogues();
-char      **FSGetCatalogues();
+extern char * FSServerName ( char *server );
+extern char ** FSListExtensions ( FSServer *svr, int *next );
+extern int FSQueryExtension ( FSServer *svr, char *name, int *major_opcode, 
+			      int *first_event, int *first_error );
 
-long        FSMaxRequestSize();
+extern char ** FSListCatalogues ( FSServer *svr, char *pattern, 
+				  int maxNames, int *actualCount );
+extern char ** FSGetCatalogues ( FSServer *svr, int *num );
 
-char      **FSListFonts();
-char      **FSListFontsWithXInfo();
+extern long FSMaxRequestSize ( FSServer *svr );
 
-Font        FSOpenBitmapFont();
+extern char ** FSListFonts ( FSServer *svr, char *pattern, int maxNames, 
+			     int *actualCount );
+extern char ** FSListFontsWithXInfo ( FSServer *svr, char *pattern, 
+				      int maxNames, int *count, 
+				      FSXFontInfoHeader ***info, 
+				      FSPropInfo ***pprops, 
+				      FSPropOffset ***offsets, 
+				      unsigned char ***prop_data );
+extern Font FSOpenBitmapFont ( FSServer *svr, FSBitmapFormat hint, 
+			       FSBitmapFormatMask fmask, char *name, 
+			       Font *otherid );
+
+extern int FSSync ( FSServer *svr, Bool discard );
+
+extern int FSCloseServer ( FSServer *svr );
+extern int FSCloseFont ( FSServer *svr, Font fid );
+extern int FSGetErrorDatabaseText ( FSServer *svr, char *name, char *type, 
+				    char *defaultp, char *buffer, int nbytes );
+extern int FSGetErrorText ( FSServer *svr, int code, char *buffer, 
+			    
+			    int nbytes );
+extern int FSFlush ( FSServer *svr );
+extern int FSFreeFontNames ( char **list );
+extern int FSFreeCatalogues ( char **list );
+extern int FSFreeExtensionList ( char **list );
+extern int FSNextEvent ( FSServer *svr, FSEvent *event );
+extern int FSQueryXBitmaps8 ( FSServer *svr, Font fid, FSBitmapFormat format, 
+			      int range_type, unsigned char *str, 
+			      unsigned long str_len, FSOffset **offsets, 
+			      unsigned char **glyphdata );
+extern int FSQueryXBitmaps16 ( FSServer *svr, Font fid, FSBitmapFormat format,
+			       int range_type, FSChar2b *str, 
+			       unsigned long str_len, FSOffset **offsets, 
+			       unsigned char **glyphdata );
+extern int FSQueryXExtents8 ( FSServer *svr, Font fid, int range_type, 
+			      unsigned char *str, unsigned long str_len, 
+			      FSXCharInfo **extents );
+extern int FSQueryXExtents16 ( FSServer *svr, Font fid, int range_type, 
+			       FSChar2b *str, unsigned long str_len, 
+			       FSXCharInfo **extents );
+extern int FSQueryXInfo ( FSServer *svr, Font fid, FSXFontInfoHeader *info, 
+			  FSPropInfo *props, FSPropOffset **offsets,
+			  unsigned char **prop_data );
+extern int FSSetCatalogues ( FSServer *svr, int num, char **cats );
+extern int FSFree ( char *data );
+extern unsigned char * FSMalloc ( unsigned size );
+
+_XFUNCPROTOEND
 
 #endif				/* _FSLIB_H_ */

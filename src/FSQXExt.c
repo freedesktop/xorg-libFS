@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSQXExt.c,v 1.5 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
 
@@ -54,9 +55,7 @@ in this Software without prior written authorization from The Open Group.
 #include "FSlibint.h"
 
 static void
-_FS_convert_char_info(src, dst)
-    fsXCharInfo *src;
-    FSXCharInfo *dst;
+_FS_convert_char_info(fsXCharInfo *src, FSXCharInfo *dst)
 {
     dst->ascent = src->ascent;
     dst->descent = src->descent;

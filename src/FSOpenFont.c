@@ -24,6 +24,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
+/* $XFree86: xc/lib/FS/FSOpenFont.c,v 1.6 2001/12/14 19:53:33 dawes Exp $ */
 
 /*
 
@@ -65,13 +66,12 @@ FSOpenBitmapFont(svr, hint, fmask, name, otherid)
     fsOpenBitmapFontReq *req;
     fsOpenBitmapFontReply reply;
     Font        fid;
-    unsigned char buf[256];
-    char*	bufptr;
+    char        buf[256];
 
     nbytes = name ? strlen(name) : 0;
     if (nbytes > 255) return 0;
     GetReq(OpenBitmapFont, req);
-    buf[0] = (unsigned char) nbytes;
+    buf[0] = nbytes;
     memcpy(&buf[1], name, nbytes);
     nbytes++;
     req->fid = fid = svr->resource_id++;
