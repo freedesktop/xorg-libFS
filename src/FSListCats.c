@@ -23,7 +23,7 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
-/* $XFree86: xc/lib/FS/FSListCats.c,v 1.6 2003/10/23 15:23:24 tsi Exp $ */
+/* $XFree86: xc/lib/FS/FSListCats.c,v 1.7 2003/12/22 17:48:02 tsi Exp $ */
 
 /*
 
@@ -78,8 +78,12 @@ FSListCatalogues(svr, pattern, maxNames, actualCount)
     (SIZEOF(fsListCataloguesReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
 	return (char **) 0;
 
-    if (rep.num_catalogues && rep.num_catalogues <= SIZE_MAX/sizeof(char *)
-	&& rep.length <= (SIZE_MAX>>2)) {
+    if (rep.num_catalogues
+#if (SIZE_MAX >> 2) <= UINT_MAX
+	&& rep.num_catalogues <= SIZE_MAX/sizeof(char *)
+	&& rep.length <= (SIZE_MAX>>2)
+#endif
+	) {
 	clist = (char **)
 	    FSmalloc((unsigned) rep.num_catalogues * sizeof(char *));
 	rlen = (rep.length << 2) - SIZEOF(fsListCataloguesReply);
