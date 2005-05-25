@@ -72,7 +72,6 @@ in this Software without prior written authorization from The Open Group.
 #endif /* USG */
 
 #include	"FSlib.h"
-#include	"FSproto.h"
 #include	"FSlibos.h"
 #include	<errno.h>
 #include	<stddef.h>
