@@ -47,6 +47,8 @@ AC_PROG_LIBTOOL
 # Check for dependencies
 PKG_CHECK_MODULES(DEP, xproto fontsproto xtrans)
 
+XTRANS_CONNECTION_FLAGS
+
 AC_SUBST(DEP_CFLAGS)
 AC_SUBST(DEP_LIBS)
 		  

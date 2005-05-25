@@ -27,7 +27,7 @@ libFS_la_SOURCES = 	\
 	FSSetCats.c	\
 	FSSync.c	\
 	FSSynchro.c	\
-	transport.c
+	fs_transport.c
 
 libFS_la_CFLAGS = $(DEP_CFLAGS)
 libFS_la_LIBADD = $(DEP_LIBS)
