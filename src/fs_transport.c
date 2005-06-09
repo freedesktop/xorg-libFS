@@ -25,4 +25,4 @@
 #define FS_t
 #define TRANS_CLIENT
 
-#include <X11/transport.c>
+#include <X11/Xtrans/transport.c>
