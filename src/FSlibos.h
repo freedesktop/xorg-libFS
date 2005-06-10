@@ -62,7 +62,7 @@ in this Software without prior written authorization from The Open Group.
 
 #ifndef WIN32
 
-#if defined(SCO) || defined(__USLC__)
+#if defined(__SCO__) || defined(__UNIXWARE__)
 #include <stdint.h>	/* For SIZE_MAX */
 #endif
 
