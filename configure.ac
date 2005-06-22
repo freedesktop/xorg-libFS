@@ -34,7 +34,7 @@ dnl protocol, so Xfixes version l.n.m corresponds to protocol version l.n,
 dnl that 'revision' number appears in Xfixes.h and has to be manually
 dnl synchronized.
 dnl
-AC_INIT(libXfixes, 3.0.0, [keithp@keithp.com], libXfixes)
+AC_INIT(libFS, 3.0.0, [keithp@keithp.com], libFS)
 AM_INIT_AUTOMAKE([dist-bzip2])
 AM_MAINTAINER_MODE
 
