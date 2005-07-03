@@ -1,4 +1,4 @@
-/* $XdotOrg: xc/lib/FS/FSlibos.h,v 1.2 2004/04/23 18:43:08 eich Exp $ */
+/* $XdotOrg: xc/lib/FS/FSlibos.h,v 1.3 2005/06/09 15:52:02 ago Exp $ */
 /* $Xorg: FSlibos.h,v 1.4 2001/02/09 02:03:25 xorgcvs Exp $ */
 
 /* @(#)FSlibos.h	4.1	91/05/02
