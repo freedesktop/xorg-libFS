@@ -1,0 +1,6 @@
+.deps
+libFS.la
+.libs
+*.lo
+Makefile
+Makefile.in
