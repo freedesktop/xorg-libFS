@@ -45,12 +45,18 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Check for dependencies
-PKG_CHECK_MODULES(DEP, xproto fontsproto xtrans)
+PKG_CHECK_MODULES(DEP, xproto fontsproto)
+AC_SUBST(DEP_CFLAGS)
+AC_SUBST(DEP_LIBS)
+#
+# Split out so we don't include xtrans C flags in fs.pc
+#
+PKG_CHECK_MODULES(XTRANS, xtrans)
+AC_SUBST(XTRANS_CFLAGS)
+AC_SUBST(XTRANS_LIBS)
 
 XTRANS_CONNECTION_FLAGS
 
-AC_SUBST(DEP_CFLAGS)
-AC_SUBST(DEP_LIBS)
 		  
 # Check fixesext configuration, strip extra digits from package version to
 # find the required protocol version
