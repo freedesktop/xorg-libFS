@@ -33,7 +33,7 @@ dnl protocol, so Xfixes version l.n.m corresponds to protocol version l.n,
 dnl that 'revision' number appears in Xfixes.h and has to be manually
 dnl synchronized.
 dnl
-AC_INIT(libFS, 3.0.0, [keithp@keithp.com], libFS)
+AC_INIT(libFS, 0.99.0, [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg], libFS)
 AM_INIT_AUTOMAKE([dist-bzip2])
 AM_MAINTAINER_MODE
 
@@ -59,6 +59,8 @@ XTRANS_CONNECTION_FLAGS
 		  
 # Check fixesext configuration, strip extra digits from package version to
 # find the required protocol version
+
+XORG_RELEASE_VERSION
 
 AC_OUTPUT([Makefile
 	   src/Makefile
