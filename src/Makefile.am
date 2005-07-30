@@ -29,7 +29,7 @@ libFS_la_SOURCES = 	\
 	FSSynchro.c	\
 	fs_transport.c
 
-AM_CFLAGS = $(DEP_CFLAGS) $(XTRANS_CFLAGS)
+AM_CFLAGS = $(DEP_CFLAGS) $(XTRANS_CFLAGS) -DFS_t -DTRANS_CLIENT
 libFS_la_LIBADD = $(DEP_LIBS) $(XTRANS_LIBS)
 
 INCLUDES = -I$(top_srcdir)/include/X11/fonts
