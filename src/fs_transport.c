@@ -21,8 +21,13 @@
  * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
  * PERFORMANCE OF THIS SOFTWARE.
  */
- 
-#define FS_t
-#define TRANS_CLIENT
 
+#ifndef FS_t
+# define FS_t
+#endif
+#ifndef TRANS_CLIENT
+# define TRANS_CLIENT
+#endif
+
+#include "config.h" /* Need to know which transport types to support */
 #include <X11/Xtrans/transport.c>
