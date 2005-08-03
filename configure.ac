@@ -44,9 +44,9 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Check for dependencies
-PKG_CHECK_MODULES(DEP, xproto fontsproto)
-AC_SUBST(DEP_CFLAGS)
-AC_SUBST(DEP_LIBS)
+PKG_CHECK_MODULES(FS, xproto fontsproto)
+AC_SUBST(FS_CFLAGS)
+AC_SUBST(FS_LIBS)
 #
 # Split out so we don't include xtrans C flags in fs.pc
 #

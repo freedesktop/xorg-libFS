@@ -6,5 +6,5 @@ includedir=@includedir@
 Name: libFS
 Description: Library Interface to the X Font Server
 Version: @PACKAGE_VERSION@
-Cflags: -I${includedir} @DEP_CFLAGS@
-Libs: -L${libdir} -lFS @DEP_LIBS@
+Cflags: -I${includedir} @FS_CFLAGS@
+Libs: -L${libdir} -lFS @FS_LIBS@
