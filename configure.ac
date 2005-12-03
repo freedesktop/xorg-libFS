@@ -56,6 +56,7 @@ AC_SUBST(XTRANS_LIBS)
 
 XTRANS_CONNECTION_FLAGS
 
+XORG_CHECK_MALLOC_ZERO
 		  
 # Check fixesext configuration, strip extra digits from package version to
 # find the required protocol version
