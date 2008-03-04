@@ -76,13 +76,13 @@ int         FSErrorListSize = sizeof(FSErrorList);
 
 
 /* ARGSUSED */
-int FSGetErrorDatabaseText(svr, name, type, defaultp, buffer, nbytes)
-    register char *name,
-               *type;
-    char       *defaultp;
-    FSServer     *svr;
-    char       *buffer;
-    int         nbytes;
+int FSGetErrorDatabaseText(
+    FSServer		*svr,
+    register char	*name,
+    register char	*type,
+    char		*defaultp,
+    char		*buffer,
+    int			 nbytes)
 {
     if (nbytes == 0)
 	return 0;
@@ -92,11 +92,11 @@ int FSGetErrorDatabaseText(svr, name, type, defaultp, buffer, nbytes)
     return 1;
 }
 
-int FSGetErrorText(svr, code, buffer, nbytes)
-    register int code;
-    register FSServer *svr;
-    char       *buffer;
-    int         nbytes;
+int FSGetErrorText(
+    register FSServer	*svr,
+    register int	 code,
+    char		*buffer,
+    int			 nbytes)
 {
 
     char       *defaultp = NULL;
