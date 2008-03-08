@@ -1,4 +1,3 @@
-dnl  $Id$
 dnl 
 dnl  Copyright © 2003 Keith Packard, Noah Levitt
 dnl 
