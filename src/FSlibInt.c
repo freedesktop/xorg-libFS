@@ -1027,7 +1027,7 @@ _FSPrintDefaultError(
 				  "Request Major code %d", mesg, BUFSIZ);
     (void) fprintf(fp, mesg, event->request_code);
     if (event->request_code < 128) {
-	sprintf(number, "%d", event->request_code);
+	snprintf(number, sizeof(number), "%d", event->request_code);
 	(void) FSGetErrorDatabaseText(svr, "FSRequest", number, "", buffer, 
 				      BUFSIZ);
     } else {
@@ -1044,7 +1044,7 @@ _FSPrintDefaultError(
 				  "Request Minor code %d", mesg, BUFSIZ);
     (void) fprintf(fp, mesg, event->minor_code);
     if (ext) {
-	sprintf(mesg, "%s.%d", ext->name, event->minor_code);
+	snprintf(mesg, sizeof(mesg), "%s.%d", ext->name, event->minor_code);
 	(void) FSGetErrorDatabaseText(svr, "FSRequest", mesg, "", buffer, 
 				      BUFSIZ);
 	(void) fprintf(fp, " (%s)", buffer);

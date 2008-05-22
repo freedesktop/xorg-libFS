@@ -105,7 +105,7 @@ int FSGetErrorText(
 
     if (nbytes == 0)
 	return 0;
-    sprintf(buf, "%d", code);
+    snprintf(buf, sizeof(buf), "%d", code);
     if (code <= (FSErrorListSize / sizeof(char *)) && code > 0) {
 	defaultp = FSErrorList[code];
 	FSGetErrorDatabaseText(svr, "FSProtoError", buf, defaultp, buffer, nbytes);
