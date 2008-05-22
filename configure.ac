@@ -23,16 +23,7 @@ dnl Process this file with autoconf to create configure.
 
 AC_PREREQ([2.57])
 
-dnl
-dnl Version should match the current XFixes version. XFixesQueryVersion
-dnl returns the version from xfixeswire.h, NOT the version we set here. But we
-dnl try to keep these the same.  Note that the library has an extra
-dnl digit in the version number to track changes which don't affect the
-dnl protocol, so Xfixes version l.n.m corresponds to protocol version l.n,
-dnl that 'revision' number appears in Xfixes.h and has to be manually
-dnl synchronized.
-dnl
-AC_INIT(libFS, 1.0.0, [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg], libFS)
+AC_INIT(libFS, 1.0.1, [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg], libFS)
 AM_INIT_AUTOMAKE([dist-bzip2])
 AM_MAINTAINER_MODE
 
