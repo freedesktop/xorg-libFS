@@ -1,6 +1,4 @@
-/* $Xorg: FSOpenServ.c,v 1.4 2001/02/09 02:03:25 xorgcvs Exp $ */
-
-/* @(#)FSOpenServ.c	4.1	91/05/02
+/*
  * Copyright 1990 Network Computing Devices;
  * Portions Copyright 1987 by Digital Equipment Corporation
  *
@@ -24,7 +22,6 @@
  * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 
  * SOFTWARE.
  */
-/* $XFree86: xc/lib/FS/FSOpenServ.c,v 1.8tsi Exp $ */
 
 /*
 
@@ -195,7 +192,7 @@ FSOpenServer(char *server)
 	    errno = ENOMEM;
 	    return (FSServer *) 0;
 	}
-	bcopy(ad, alts[i].name, altlen);
+	memmove(alts[i].name, ad, altlen);
 	alts[i].name[altlen] = '\0';
 	ad += altlen + ((4 - (altlen + 2)) & 3);
     }

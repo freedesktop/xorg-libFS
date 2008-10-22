@@ -1,5 +1,3 @@
-/* $Xorg: FSlibint.h,v 1.4 2001/02/09 02:03:25 xorgcvs Exp $ */
-
 /*
  * Copyright 1990 Network Computing Devices;
  * Portions Copyright 1987 by Digital Equipment Corporation
@@ -50,7 +48,6 @@ used in advertising or otherwise to promote the sale, use or other dealings
 in this Software without prior written authorization from The Open Group.
 
 */
-/* $XFree86: xc/lib/FS/FSlibint.h,v 3.8 2003/08/29 18:01:12 herrb Exp $ */
 
 /*
  * FSlib internal decls
@@ -285,7 +282,7 @@ extern void Data();
 #else
 #define Data(svr, data, len) \
 	if (svr->bufptr + (len) <= svr->bufmax) {\
-		bcopy(data, svr->bufptr, (int)len);\
+		memmove(svr->bufptr, data, len);\
 		svr->bufptr += ((len) + 3) & ~3;\
 	} else\
 		_FSSend(svr, data, len)
@@ -337,7 +334,7 @@ extern void Data();
 #define STARTITERATE(tpvar,type,start,endcond,decr) \
   { register char *cpvar; \
   for (cpvar = (char *) start; endcond; cpvar = NEXTPTR(cpvar,type), decr) { \
-    type dummy; bcopy (cpvar, (char *) &dummy, SIZEOF(type)); \
+    type dummy; memmove ((char *) &dummy, cpvar, SIZEOF(type)); \
     tpvar = (type *) cpvar;
 #define ENDITERATE }}
 
