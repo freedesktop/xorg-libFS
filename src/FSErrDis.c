@@ -58,7 +58,7 @@ in this Software without prior written authorization from The Open Group.
 #include "FSlibint.h"
 #include <X11/Xos.h>
 
-char       *FSErrorList[] = {
+static char *FSErrorList[] = {
      /* FSBadRequest	 */ "BadRequest, invalid request code or no such operation",
      /* FSBadFormat	 */ "BadFormat, bad font format mask",
      /* FSBadFont	 */ "BadFont, invalid Font parameter",
@@ -72,7 +72,7 @@ char       *FSErrorList[] = {
      /* FSBadLength	 */ "BadLength, request too large or internal FSlib length error",
      /* FSBadImplementation */ "BadImplementation, request unsupported",
 };
-int         FSErrorListSize = sizeof(FSErrorList);
+static int FSErrorListSize = sizeof(FSErrorList);
 
 
 /* ARGSUSED */

@@ -115,6 +115,9 @@ extern int _FSGetHostname ( char *buf, int maxlen );
 extern FSErrorHandler  FSSetErrorHandler ( FSErrorHandler handler );
 extern FSIOErrorHandler FSSetIOErrorHandler ( FSIOErrorHandler handler );
 
+extern _FSQEvent *_FSqfree;
+extern FSServer *_FSHeadOfServerList;
+
 #ifndef BUFSIZE
 #define BUFSIZE 2048		/* FS output buffer size. */
 #endif

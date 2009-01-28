@@ -60,7 +60,7 @@ in this Software without prior written authorization from The Open Group.
 #include	"FSlibint.h"
 #include 	<X11/Xtrans/Xtrans.h>
 
-int         _FSdebug = 0;
+static int _FSdebug = 0;
 
 static fsReq _dummy_request = {
     0, 0, 0

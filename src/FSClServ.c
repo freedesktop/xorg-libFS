@@ -58,8 +58,6 @@ in this Software without prior written authorization from The Open Group.
 #include	"FSlib.h"
 #include	"FSlibint.h"
 
-extern FSServer *_FSHeadOfServerList;
-
 int 
 FSCloseServer(FSServer *svr)
 {

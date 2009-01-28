@@ -56,8 +56,6 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include "FSlibint.h"
 
-extern _FSQEvent *_FSqfree;
-
 /* synchronize with errors and events */
 
 int FSSync(
