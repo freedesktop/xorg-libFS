@@ -961,7 +961,7 @@ _FSDefaultIOError(FSServer *svr)
 
 		   errno, _SysErrorMsg(errno),
 #endif
-		   FSServerString(svr));
+		   FSServerString(svr) ? FSServerString(svr) : "");
     (void) fprintf(stderr,
 		   "      after %lu requests (%lu known processed) with %d events remaining.\r\n",
 		   FSNextRequest(svr) - 1, FSLastKnownRequestProcessed(svr),
