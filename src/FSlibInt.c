@@ -1287,9 +1287,6 @@ _FSFreeQ(void)
 #ifdef hpux
 #define NEED_UTSNAME
 #endif
-#ifdef USG
-#define NEED_UTSNAME
-#endif
 #ifdef SVR4
 #ifndef _SEQUENT_
 #define NEED_UTSNAME

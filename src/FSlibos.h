@@ -297,32 +297,4 @@ typedef fd_set FdSet;
 #define FScalloc(nelem, elsize) calloc((nelem), (elsize))
 #endif
 
-/*
- *	ReadvFromServer and WritevToSever use struct iovec, normally found
- *	in Berkeley systems in <sys/uio.h>.  See the readv(2) and writev(2)
- *	manual pages for details.
- *
- *	struct iovec {
- *		caddr_t iov_base;
- *		int iov_len;
- *	};
- */
-
-#ifdef USG
-
-#if defined(USG) && !defined(CRAY) && !defined(umips) && !defined(MOTOROLA)
-#ifndef __TIMEVAL__
-#define __TIMEVAL__
-struct timeval {		/* BSD has in <sys/time.h> */
-    long        tv_sec;
-    long        tv_usec;
-};
-
-#endif				/* __TIMEVAL__ */
-
-#endif				/* not CRAY or umips */
-
-#endif				/* USG */
-
-
 #define SearchString(string, char) index((string), (char))
