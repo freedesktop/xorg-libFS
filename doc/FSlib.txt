@@ -1,5 +1,3 @@
-$Xorg: FSlib.doc,v 1.3 2000/08/17 19:42:50 cpqbld Exp $
-
 Protocol requests
 
 These functions make protocol requests corresponding to their names.
