@@ -58,7 +58,7 @@ in this Software without prior written authorization from The Open Group.
 #include "FSlibint.h"
 #include <X11/Xos.h>
 
-static char *FSErrorList[] = {
+static const char *FSErrorList[] = {
      /* FSBadRequest	 */ "BadRequest, invalid request code or no such operation",
      /* FSBadFormat	 */ "BadFormat, bad font format mask",
      /* FSBadFont	 */ "BadFont, invalid Font parameter",
@@ -78,15 +78,15 @@ static int FSErrorListSize = sizeof(FSErrorList);
 /* ARGSUSED */
 int FSGetErrorDatabaseText(
     FSServer		*svr,
-    register char	*name,
-    register char	*type,
-    char		*defaultp,
+    const char		*name,
+    const char		*type,
+    const char		*defaultp,
     char		*buffer,
     int			 nbytes)
 {
     if (nbytes == 0)
 	return 0;
-    (void) strncpy(buffer, (char *) defaultp, nbytes);
+    (void) strncpy(buffer, defaultp, nbytes);
     if ((strlen(defaultp) + 1) > nbytes)
 	buffer[nbytes - 1] = '\0';
     return 1;
@@ -99,7 +99,7 @@ int FSGetErrorText(
     int			 nbytes)
 {
 
-    char       *defaultp = NULL;
+    const char *defaultp = NULL;
     char        buf[32];
     register _FSExtension *ext;
 

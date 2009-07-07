@@ -277,8 +277,9 @@ extern int FSSync ( FSServer *svr, Bool discard );
 
 extern int FSCloseServer ( FSServer *svr );
 extern int FSCloseFont ( FSServer *svr, Font fid );
-extern int FSGetErrorDatabaseText ( FSServer *svr, char *name, char *type, 
-				    char *defaultp, char *buffer, int nbytes );
+extern int FSGetErrorDatabaseText ( FSServer *svr, const char *name,
+				    const char *type, const char *defaultp,
+				    char *buffer, int nbytes );
 extern int FSGetErrorText ( FSServer *svr, int code, char *buffer, 
 			    
 			    int nbytes );
