@@ -26,8 +26,6 @@ pkgconfig_DATA = libfs.pc
 
 EXTRA_DIST = libfs.pc.in doc/FSlib.txt
 
-EXTRA_DIST += ChangeLog
-MAINTAINERCLEANFILES = ChangeLog
 
 .PHONY: ChangeLog
 
