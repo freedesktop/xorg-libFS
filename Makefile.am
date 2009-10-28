@@ -27,12 +27,15 @@ pkgconfig_DATA = libfs.pc
 EXTRA_DIST = libfs.pc.in doc/FSlib.txt
 
 
-.PHONY: ChangeLog
+.PHONY: ChangeLog INSTALL
+
+INSTALL:
+	$(INSTALL_CMD)
 
 ChangeLog:
 	$(CHANGELOG_CMD)
 
-dist-hook: ChangeLog
+dist-hook: ChangeLog INSTALL
 
 if LINT
 lint:
