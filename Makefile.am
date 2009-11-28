@@ -24,6 +24,7 @@ SUBDIRS = src
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libfs.pc
 
+MAINTAINERCLEANFILES = ChangeLog INSTALL
 EXTRA_DIST = libfs.pc.in doc/FSlib.txt
 
 
