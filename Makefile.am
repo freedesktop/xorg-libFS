@@ -24,9 +24,9 @@ SUBDIRS = src
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libfs.pc
 
-MAINTAINERCLEANFILES = ChangeLog INSTALL
-EXTRA_DIST = doc/FSlib.txt
+dist_doc_DATA = doc/FSlib.txt
 
+MAINTAINERCLEANFILES = ChangeLog INSTALL
 
 .PHONY: ChangeLog INSTALL
 
