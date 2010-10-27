@@ -35,19 +35,15 @@ XORG_DEFAULT_OPTIONS
 AM_CONFIG_HEADER(config.h)
 
 # Check for progs
-AC_PROG_CC
 AC_PROG_LIBTOOL
 
 # Check for dependencies
 PKG_CHECK_MODULES(FS, xproto fontsproto)
-AC_SUBST(FS_CFLAGS)
-AC_SUBST(FS_LIBS)
+
 #
 # Split out so we don't include xtrans C flags in fs.pc
 #
 PKG_CHECK_MODULES(XTRANS, xtrans)
-AC_SUBST(XTRANS_CFLAGS)
-AC_SUBST(XTRANS_LIBS)
 
 XTRANS_CONNECTION_FLAGS
 
