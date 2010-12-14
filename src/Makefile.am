@@ -35,7 +35,7 @@ libFS_la_LIBADD = $(FS_LIBS) $(XTRANS_LIBS)
 
 INCLUDES = -I$(top_srcdir)/include/X11/fonts
 
-libFS_la_LDFLAGS = -version-number 6:0:0 -no-undefined
+libFS_la_LDFLAGS = -export-symbols-regex '^FS.*' -version-number 6:0:0 -no-undefined
 
 libFSincludedir = $(includedir)/X11/fonts
 libFSinclude_HEADERS = \
