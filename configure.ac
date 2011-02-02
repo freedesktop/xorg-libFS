@@ -42,12 +42,7 @@ XORG_DEFAULT_OPTIONS
 XORG_CHECK_MALLOC_ZERO
 
 # Obtain compiler/linker options for depedencies
-PKG_CHECK_MODULES(FS, xproto fontsproto)
-
-#
-# Split out so we don't include xtrans C flags in fs.pc
-#
-PKG_CHECK_MODULES(XTRANS, xtrans)
+PKG_CHECK_MODULES(FS, xproto fontsproto xtrans)
 
 # Find needed libraries for TCP sockets (pre-pended in $LIBS)
 XTRANS_CONNECTION_FLAGS
