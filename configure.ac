@@ -53,5 +53,6 @@ XORG_LINT_LIBRARY([FS])
 		  
 AC_CONFIG_FILES([Makefile
 		src/Makefile
+		test/Makefile
 		libfs.pc])
 AC_OUTPUT
