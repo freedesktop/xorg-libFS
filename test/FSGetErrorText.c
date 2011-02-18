@@ -40,7 +40,7 @@ CheckErrorMessage(FSServer *srv, int code, const char *codestr)
 
     if (!FSGetErrorText(srv, code, buf, sizeof(buf))) {
 	fprintf(stderr, "FSGetErrorText(srv, %s (%d), buf, %d) failed",
-		codestr, code, sizeof(buf));
+		codestr, code, (int) sizeof(buf));
 	return 0;
     }
 
