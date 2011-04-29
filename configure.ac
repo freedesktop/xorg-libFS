@@ -42,7 +42,7 @@ XORG_DEFAULT_OPTIONS
 XORG_CHECK_MALLOC_ZERO
 
 # Obtain compiler/linker options for depedencies
-PKG_CHECK_MODULES(FS, xproto fontsproto xtrans)
+PKG_CHECK_MODULES(FS, xproto >= 7.0.17 fontsproto xtrans)
 
 # Find needed libraries for TCP sockets (pre-pended in $LIBS)
 XTRANS_CONNECTION_FLAGS

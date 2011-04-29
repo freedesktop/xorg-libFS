@@ -61,7 +61,7 @@ in this Software without prior written authorization from The Open Group.
 #include	<errno.h>
 #include	<stddef.h>
 
-typedef int (* FSIOErrorHandler)(FSServer *);
+typedef int (* FSIOErrorHandler)(FSServer *) _X_NORETURN;
 typedef int (* FSErrorHandler)(FSServer *, FSErrorEvent *);
 
 extern FSIOErrorHandler _FSIOErrorFunction;
@@ -89,7 +89,7 @@ extern int _FSUnknownWireEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
 extern int _FSUnknownNativeEvent ( FSServer *svr, FSEvent *re, 
 				   fsEvent *event );
 extern int _FSWireToEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
-extern int _FSDefaultIOError ( FSServer *svr );
+extern int _FSDefaultIOError ( FSServer *svr ) _X_NORETURN;
 extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event, 
 				  FILE *fp );
 extern int _FSDefaultError ( FSServer *svr, FSErrorEvent *event );
