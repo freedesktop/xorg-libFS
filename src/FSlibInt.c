@@ -1004,6 +1004,11 @@ _FSError(
     /* NOTREACHED */
 }
 
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-nonliteral" // We know better
+#endif
+
 int
 _FSPrintDefaultError(
     FSServer		*svr,
@@ -1061,6 +1066,10 @@ _FSPrintDefaultError(
     fputs("\n", fp);
     return 1;
 }
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
 
 int
 _FSDefaultError(
