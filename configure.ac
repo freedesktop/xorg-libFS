@@ -50,7 +50,7 @@ XTRANS_CONNECTION_FLAGS
 # Allow checking code with lint, sparse, etc.
 XORG_WITH_LINT
 XORG_LINT_LIBRARY([FS])
-		  
+
 AC_CONFIG_FILES([Makefile
 		src/Makefile
 		test/Makefile
