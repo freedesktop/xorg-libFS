@@ -61,7 +61,7 @@ in this Software without prior written authorization from The Open Group.
 #include <X11/Xos.h>
 
 static void _EatData32 ( FSServer *svr, unsigned long n );
-static char * _SysErrorMsg ( int n );
+static const char * _SysErrorMsg ( int n );
 
 /* check for both EAGAIN and EWOULDBLOCK, because some supposedly POSIX
  * systems are broken and return EWOULDBLOCK when they should return EAGAIN
@@ -938,7 +938,7 @@ _FSWireToEvent(
 }
 
 
-static char *
+static const char *
 _SysErrorMsg(int n)
 {
     char       *s = strerror(n);
@@ -1018,7 +1018,7 @@ _FSPrintDefaultError(
     char        buffer[BUFSIZ];
     char        mesg[BUFSIZ];
     char        number[32];
-    char       *mtype = "FSlibMessage";
+    const char *mtype = "FSlibMessage";
     register _FSExtension *ext = (_FSExtension *) NULL;
 
     (void) FSGetErrorText(svr, event->error_code, buffer, BUFSIZ);
