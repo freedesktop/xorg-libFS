@@ -101,7 +101,7 @@ void OutOfMemory(
  */
 
 FSServer   *
-FSOpenServer(char *server)
+FSOpenServer(const char *server)
 {
     FSServer   *svr;
     int         i;
@@ -135,7 +135,7 @@ FSOpenServer(char *server)
     }
     (void) strcpy(svr->server_name, server);
 
-    if ((svr->trans_conn = _FSConnectServer(server)) == NULL) {
+    if ((svr->trans_conn = _FSConnectServer(svr->server_name)) == NULL) {
 	goto fail;
     }
 

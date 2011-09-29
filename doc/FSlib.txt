@@ -6,7 +6,7 @@ Connection Setup
 
 FSServer     *
 FSOpenServer(
-    char       *server);
+    const char   *server);
 
 Creates a connection to the font server specified in the 'server' string.
 
@@ -221,10 +221,10 @@ FSMaxRequestSize(
 Returns the largest request size (in 4 byte quantities) that the
 server can handle.
 
-char       *
+const char *
 FSServerName(
-    char       *server);
+    const char    *server);
 
 Returns the name that FSlib would use to connect to the server.
-Translates a NULL in the value of $FONT_SERVER.
+Translates a NULL into the value of $FONT_SERVER.
 

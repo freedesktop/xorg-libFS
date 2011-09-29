@@ -242,12 +242,12 @@ typedef struct _FSXFontInfoHeader {
 
 _XFUNCPROTOBEGIN
 
-extern FSServer * FSOpenServer ( char *server );
+extern FSServer * FSOpenServer ( const char *server );
 
 extern FSSyncHandler FSSynchronize(FSServer *, int);
 extern FSSyncHandler FSSetAfterFunction(FSServer *, FSSyncHandler);
 
-extern char * FSServerName ( char *server );
+extern const char * FSServerName ( const char *server );
 extern char ** FSListExtensions ( FSServer *svr, int *next );
 extern int FSQueryExtension ( FSServer *svr, char *name, int *major_opcode,
 			      int *first_event, int *first_error );

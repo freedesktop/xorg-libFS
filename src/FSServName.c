@@ -58,10 +58,10 @@ in this Software without prior written authorization from The Open Group.
 #include	<stdlib.h>
 #include	"FSlib.h"
 
-char       *
-FSServerName(char *server)
+const char *
+FSServerName(const char *server)
 {
-    char       *s;
+    const char *s;
 
     if (server != NULL && *server != '\0')
 	return server;
