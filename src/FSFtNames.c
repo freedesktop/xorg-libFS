@@ -57,7 +57,7 @@ in this Software without prior written authorization from The Open Group.
 char      **
 FSListFonts(
     FSServer	*svr,
-    char	*pattern,
+    const char	*pattern,
     int		 maxNames,
     int		*actualCount)
 {

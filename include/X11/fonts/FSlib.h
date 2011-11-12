@@ -258,9 +258,9 @@ extern char ** FSGetCatalogues ( FSServer *svr, int *num );
 
 extern long FSMaxRequestSize ( FSServer *svr );
 
-extern char ** FSListFonts ( FSServer *svr, char *pattern, int maxNames,
+extern char ** FSListFonts ( FSServer *svr, const char *pattern, int maxNames,
 			     int *actualCount );
-extern char ** FSListFontsWithXInfo ( FSServer *svr, char *pattern,
+extern char ** FSListFontsWithXInfo ( FSServer *svr, const char *pattern,
 				      int maxNames, int *count,
 				      FSXFontInfoHeader ***info,
 				      FSPropInfo ***pprops,

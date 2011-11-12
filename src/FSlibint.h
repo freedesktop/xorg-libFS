@@ -74,7 +74,7 @@ extern void _FSFlush ( FSServer *svr );
 extern void _FSRead ( FSServer *svr, char *data, long size );
 extern void _FSReadEvents ( FSServer *svr );
 extern void _FSReadPad ( FSServer *svr, char *data, long size );
-extern void _FSSend ( FSServer *svr, char *data, long size );
+extern void _FSSend ( FSServer *svr, const char *data, long size );
 extern void _FSEnq ( FSServer *svr, fsEvent *event );
 extern void _FSFreeServerStructure ( FSServer *svr );
 extern int _FSError ( FSServer *svr, fsError *rep );

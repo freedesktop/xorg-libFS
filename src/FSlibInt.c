@@ -536,7 +536,7 @@ _FSReadPad(
 void
 _FSSend(
     register FSServer	*svr,
-    char		*data,
+    const char		*data,
     register long	 size)
 {
     struct iovec iov[3];
@@ -591,7 +591,7 @@ _FSSend(
 	    }
 
 	InsertIOV(svr->buffer, svrbufsize)
-	InsertIOV(data, size)
+	InsertIOV((char *)data, size)
 	InsertIOV(pad, padsize)
 
 	ESET(0);

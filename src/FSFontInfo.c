@@ -56,7 +56,7 @@ in this Software without prior written authorization from The Open Group.
 char      **
 FSListFontsWithXInfo(
     FSServer		  *svr,
-    char		  *pattern,
+    const char		  *pattern,
     int			   maxNames,
     int			  *count,
     FSXFontInfoHeader	***info,
