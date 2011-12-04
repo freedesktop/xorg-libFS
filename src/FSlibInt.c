@@ -946,6 +946,11 @@ _SysErrorMsg(int n)
     return (s ? s : "no such error");
 }
 
+#ifdef __SUNPRO_C
+/* prevent "Function has no return statement" error for _FSDefaultIOError */
+#pragma does_not_return(exit)
+#endif
+
 /*
  * _FSDefaultIOError - Default fatal system error reporting routine.  Called
  * when an X internal system error is encountered.
