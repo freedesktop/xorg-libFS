@@ -150,7 +150,6 @@ FSQueryXBitmaps16(
     req->length += ((str_len * SIZEOF(fsChar2b)) + 3) >> 2;
     if (FSProtocolVersion(svr) == 1)
     {
-	int i;
 	fsChar2b_version1 *swapped_str;
 
 	if (str_len > SIZE_MAX/SIZEOF(fsChar2b_version1))
