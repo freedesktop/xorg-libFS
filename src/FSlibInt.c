@@ -1194,7 +1194,7 @@ doData16(
 }
 
 void
-Data16(svr, data, len)
+Data16(
     FSServer	*svr,
     short	*data,
     unsigned	 len)
