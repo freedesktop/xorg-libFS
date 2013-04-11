@@ -134,52 +134,19 @@ FSListFontsWithXInfo(
 		goto badmem;
 
 	    if (fhdr) {
-		FSXFontInfoHeader **tmp_fhdr =
-                    FSrealloc(fhdr, sizeof(FSXFontInfoHeader *) * size);
-		char **tmp_flist =
-                    FSrealloc(flist, sizeof(char *) * size);
-		FSPropInfo **tmp_pi =
-                    FSrealloc(pi, sizeof(FSPropInfo *) * size);
-		FSPropOffset **tmp_po =
-                    FSrealloc(po, sizeof(FSPropOffset *) * size);
-		unsigned char **tmp_pd =
-                    FSrealloc(pd, sizeof(unsigned char *) * size);
-
-		if (!tmp_fhdr || !tmp_flist || !tmp_pi || !tmp_po || !tmp_pd) {
-		    for (j = (i - 1); j >= 0; j--) {
-			FSfree(flist[j]);
-			FSfree(fhdr[j]);
-			FSfree(pi[j]);
-			FSfree(po[j]);
-			FSfree(pd[j]);
-		    }
-		    if (tmp_flist)
-			FSfree(tmp_flist);
-		    else
-			FSfree(flist);
-		    if (tmp_fhdr)
-			FSfree(tmp_fhdr);
-		    else
-			FSfree(fhdr);
-		    if (tmp_pi)
-			FSfree(tmp_pi);
-		    else
-			FSfree(pi);
-		    if (tmp_po)
-			FSfree(tmp_po);
-		    else
-			FSfree(po);
-		    if (tmp_pd)
-			FSfree(tmp_pd);
-		    else
-			FSfree(pd);
-		    goto clearwire;
+#define ResizeArray(var, type) { \
+		    type **tmp = FSrealloc(var, sizeof(type *) * size); \
+		    if (tmp)						\
+			var = tmp;					\
+		    else						\
+			goto badmem;					\
 		}
-		fhdr = tmp_fhdr;
-		flist = tmp_flist;
-		pi = tmp_pi;
-		po = tmp_po;
-		pd = tmp_pd;
+
+		ResizeArray(fhdr, FSXFontInfoHeader)
+		ResizeArray(flist, char)
+		ResizeArray(pi, FSPropInfo)
+		ResizeArray(po, FSPropOffset)
+		ResizeArray(pd, unsigned char)
 	    } else {
 		if (!(fhdr = FSmalloc(sizeof(FSXFontInfoHeader *) * size)))
 		    goto clearwire;
