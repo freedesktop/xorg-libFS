@@ -78,6 +78,7 @@ FSListFontsWithXInfo(
     fsPropInfo local_pi;
     fsPropOffset local_po;
     Status status;
+    Bool eat_data = True;
 
     GetReq(ListFontsWithXInfo, req);
     req->maxNames = maxNames;
@@ -101,26 +102,8 @@ FSListFontsWithXInfo(
 				SIZEOF(fsGenericReply)) >> 2), fsFalse);
 	}
 	if (!status) {
-	    for (j = (i - 1); j >= 0; j--) {
-		FSfree(fhdr[j]);
-		FSfree(pi[j]);
-		FSfree(po[j]);
-		FSfree(pd[j]);
-		FSfree(flist[j]);
-	    }
-	    if (flist)
-		FSfree(flist);
-	    if (fhdr)
-		FSfree(fhdr);
-	    if (pi)
-		FSfree(pi);
-	    if (po)
-		FSfree(po);
-	    if (pd)
-		FSfree(pd);
-
-	    SyncHandle();
-	    return (char **) NULL;
+	    eat_data = False;
+	    goto badmem;
 	}
 	if (reply.nameLength == 0)	/* got last reply in version 1 */
 	    break;
@@ -148,30 +131,16 @@ FSListFontsWithXInfo(
 		ResizeArray(po, FSPropOffset)
 		ResizeArray(pd, unsigned char)
 	    } else {
-		if (!(fhdr = FSmalloc(sizeof(FSXFontInfoHeader *) * size)))
-		    goto clearwire;
-		if (!(flist = FSmalloc(sizeof(char *) * size))) {
-		    FSfree(fhdr);
-		    goto clearwire;
+#define InitArray(var, type) \
+		if ((var = FSmalloc(sizeof(type *) * size)) == NULL) {	\
+		    goto badmem;					\
 		}
-		if (!(pi = FSmalloc(sizeof(FSPropInfo *) * size))) {
-		    FSfree(fhdr);
-		    FSfree(flist);
-		    goto clearwire;
-		}
-		if (!(po = FSmalloc(sizeof(FSPropOffset *) * size))) {
-		    FSfree(fhdr);
-		    FSfree(flist);
-		    FSfree(pi);
-		    goto clearwire;
-		}
-		if (!(pd = FSmalloc(sizeof(unsigned char *) * size))) {
-		    FSfree(fhdr);
-		    FSfree(flist);
-		    FSfree(pi);
-		    FSfree(po);
-		    goto clearwire;
-		}
+
+		InitArray(fhdr, FSXFontInfoHeader)
+		InitArray(flist, char)
+		InitArray(pi, FSPropInfo)
+		InitArray(po, FSPropOffset)
+		InitArray(pd, unsigned char)
 	    }
 	}
 	fhdr[i] = FSmalloc(sizeof(FSXFontInfoHeader));
@@ -182,45 +151,33 @@ FSListFontsWithXInfo(
 
 	/* alloc space for the name */
 	flist[i] = FSmalloc(reply.nameLength + 1);
+	if (!flist[i])
+	    goto cleanfhdr;
 	if (FSProtocolVersion(svr) == 1)
 	{
 	    /* get the name */
-	    if (!flist[i]) {
-		nbytes = (reply.nameLength + 3) & ~3;
-		_FSEatData(svr, (unsigned long) nbytes);
-		goto badmem;
-	    }
 	    _FSReadPad(svr, flist[i], (long) reply.nameLength);
 	    flist[i][reply.nameLength] = '\0';
 	}
 
 	pi[i] = FSmalloc(sizeof(FSPropInfo));
-	if (!pi[i]) {
-	    FSfree(fhdr[i]);
-	    goto badmem;
-	}
+	if (!pi[i])
+	    goto cleanflist;
 	_FSReadPad(svr, (char *) &local_pi, SIZEOF(fsPropInfo));
 	pi[i]->num_offsets = local_pi.num_offsets;
 	pi[i]->data_len = local_pi.data_len;
 
 #if SIZE_MAX <= UINT_MAX
 	if (pi[i]->num_offsets > SIZE_MAX / sizeof(FSPropOffset))
-	    goto badmem;
+	    goto cleanpi;
 #endif
 
 	po[i] = FSmalloc(pi[i]->num_offsets * sizeof(FSPropOffset));
-	if (!po[i]) {
-	    FSfree(fhdr[i]);
-	    FSfree(pi[i]);
-	    goto badmem;
-	}
+	if (!po[i])
+	    goto cleanpi;
 	pd[i] = FSmalloc(pi[i]->data_len);
-	if (!pd[i]) {
-	    FSfree(fhdr[i]);
-	    FSfree(pi[i]);
-	    FSfree(po[i]);
-	    goto badmem;
-	}
+	if (!pd[i])
+	    goto cleanpo;
 	/* get offsets */
 	for (j=0; j<pi[i]->num_offsets; j++)
 	{
@@ -241,11 +198,6 @@ FSListFontsWithXInfo(
 	if (FSProtocolVersion(svr) != 1)
 	{
 	    /* get the name */
-	    if (!flist[i]) {
-		nbytes = (reply.nameLength + 3) & ~3;
-		_FSEatData(svr, (unsigned long) nbytes);
-		goto badmem;
-	    }
 	    _FSRead(svr, flist[i], (long) reply.nameLength);
 	    flist[i][reply.nameLength] = '\0';
 
@@ -254,7 +206,7 @@ FSListFontsWithXInfo(
 	}
 	/* avoid integer overflow */
 	if (i > INT_MAX - 1) {
-	    goto badmem;
+	    goto cleanpd;
 	}
     }
     *info = fhdr;
@@ -265,6 +217,18 @@ FSListFontsWithXInfo(
     SyncHandle();
     return flist;
 
+/* Error cleanup for when we're partway through filling in item #i in arrays */
+cleanpd:
+    FSfree(pd[i]);
+cleanpo:
+    FSfree(po[i]);
+cleanpi:
+    FSfree(pi[i]);
+cleanflist:
+    FSfree(flist[i]);
+cleanfhdr:
+    FSfree(fhdr[i]);
+/* Error cleanup for all previously filled in items in the arrays */
 badmem:
     for (j = (i - 1); j >= 0; j--) {
 	FSfree(pi[j]);
@@ -273,29 +237,25 @@ badmem:
 	FSfree(flist[j]);
 	FSfree(fhdr[j]);
     }
-    if (flist)
-	FSfree(flist);
-    if (fhdr)
-	FSfree(fhdr);
-    if (pi)
-	FSfree(pi);
-    if (po)
-	FSfree(po);
-    if (pd)
-	FSfree(pd);
+    FSfree(flist);
+    FSfree(fhdr);
+    FSfree(pi);
+    FSfree(po);
+    FSfree(pd);
 
+    if (eat_data) {
+	do {
+	    fsPropInfo  ti;
 
-clearwire:
-    do {
-	fsPropInfo  ti;
-
-	_FSEatData(svr, (reply.nameLength + 3) & ~3);
-	_FSReadPad(svr, (char *) &ti, SIZEOF(fsPropInfo));
-	_FSEatData(svr, (SIZEOF(fsPropOffset) * ti.num_offsets));
-	_FSEatData(svr, ti.data_len);
-    } while (_FSReply(svr, (fsReply *) & reply,
-		      ((SIZEOF(fsListFontsWithXInfoReply)
-       - SIZEOF(fsGenericReply)) >> 2), fsFalse) && (reply.nameLength != 0));
+	    _FSEatData(svr, (reply.nameLength + 3) & ~3);
+	    _FSReadPad(svr, (char *) &ti, SIZEOF(fsPropInfo));
+	    _FSEatData(svr, (SIZEOF(fsPropOffset) * ti.num_offsets));
+	    _FSEatData(svr, ti.data_len);
+	} while (_FSReply(svr, (fsReply *) &reply,
+			  ((SIZEOF(fsListFontsWithXInfoReply)
+			    - SIZEOF(fsGenericReply)) >> 2), fsFalse)
+		 && (reply.nameLength != 0));
+    }
     SyncHandle();
     return (char **) NULL;
 }
