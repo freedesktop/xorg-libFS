@@ -748,7 +748,8 @@ _FSReply(
 		unsigned long serial;
 		long        err_data;
 
-		err = *(fsError *) rep;
+		/* copy in the part we already read off the wire */
+		memcpy(&err, rep, SIZEOF(fsReply));
 		/* read the rest of the error */
 		_FSRead(svr, (char *) &err + SIZEOF(fsReply),
 			(long) (SIZEOF(fsError) - SIZEOF(fsReply)));
