@@ -91,7 +91,7 @@ FSListFonts(
 
 	if ((!flist) || (!c)) {
 	    if (flist)
-		FSfree((char *) flist);
+		FSfree(flist);
 	    if (c)
 		FSfree(c);
 	    _FSEatData(svr, (unsigned long) rlen);
@@ -122,7 +122,7 @@ int FSFreeFontNames(char **list)
 {
     if (list) {
 	FSfree(list[0] - 1);
-	FSfree((char *) list);
+	FSfree(list);
     }
     return 1;
 }

@@ -98,7 +98,7 @@ FSQueryXBitmaps8(
 #if (SIZE_MAX >> 2) <= UINT_MAX
     /* XXX This thest is incomplete */
     if (reply.length > (SIZE_MAX >> 2)) {
-	FSfree((char *) offs);
+	FSfree(offs);
 	return FSBadAlloc;
     }
 #endif
@@ -107,7 +107,7 @@ FSQueryXBitmaps8(
     gd = FSmalloc(left);
     *glyphdata = gd;
     if (!gd) {
-	FSfree((char *) offs);
+	FSfree(offs);
 	return FSBadAlloc;
     }
     for (i=0; i<reply.num_chars; i++)
@@ -183,7 +183,7 @@ FSQueryXBitmaps16(
 #if (SIZE_MAX >> 2) <= UINT_MAX
     /* XXX - this test is incomplete */
     if (reply.length > (SIZE_MAX>>2)) {
-	FSfree((char *) offs);
+	FSfree(offs);
 	return FSBadAlloc;
     }
 #endif
@@ -192,7 +192,7 @@ FSQueryXBitmaps16(
     gd = FSmalloc(left);
     *glyphdata = gd;
     if (!gd) {
-	FSfree((char *) offs);
+	FSfree(offs);
 	return FSBadAlloc;
     }
     for (i=0; i<reply.num_chars; i++)

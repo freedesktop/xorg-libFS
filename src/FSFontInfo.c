@@ -102,22 +102,22 @@ FSListFontsWithXInfo(
 	}
 	if (!status) {
 	    for (j = (i - 1); j >= 0; j--) {
-		FSfree((char *) fhdr[j]);
-		FSfree((char *) pi[j]);
-		FSfree((char *) po[j]);
-		FSfree((char *) pd[j]);
+		FSfree(fhdr[j]);
+		FSfree(pi[j]);
+		FSfree(po[j]);
+		FSfree(pd[j]);
 		FSfree(flist[j]);
 	    }
 	    if (flist)
-		FSfree((char *) flist);
+		FSfree(flist);
 	    if (fhdr)
-		FSfree((char *) fhdr);
+		FSfree(fhdr);
 	    if (pi)
-		FSfree((char *) pi);
+		FSfree(pi);
 	    if (po)
-		FSfree((char *) po);
+		FSfree(po);
 	    if (pd)
-		FSfree((char *) pd);
+		FSfree(pd);
 
 	    SyncHandle();
 	    return (char **) NULL;
@@ -147,32 +147,32 @@ FSListFontsWithXInfo(
 
 		if (!tmp_fhdr || !tmp_flist || !tmp_pi || !tmp_po || !tmp_pd) {
 		    for (j = (i - 1); j >= 0; j--) {
-			FSfree((char *) flist[j]);
-			FSfree((char *) fhdr[j]);
-			FSfree((char *) pi[j]);
-			FSfree((char *) po[j]);
-			FSfree((char *) pd[j]);
+			FSfree(flist[j]);
+			FSfree(fhdr[j]);
+			FSfree(pi[j]);
+			FSfree(po[j]);
+			FSfree(pd[j]);
 		    }
 		    if (tmp_flist)
-			FSfree((char *) tmp_flist);
+			FSfree(tmp_flist);
 		    else
-			FSfree((char *) flist);
+			FSfree(flist);
 		    if (tmp_fhdr)
-			FSfree((char *) tmp_fhdr);
+			FSfree(tmp_fhdr);
 		    else
-			FSfree((char *) fhdr);
+			FSfree(fhdr);
 		    if (tmp_pi)
-			FSfree((char *) tmp_pi);
+			FSfree(tmp_pi);
 		    else
-			FSfree((char *) pi);
+			FSfree(pi);
 		    if (tmp_po)
-			FSfree((char *) tmp_po);
+			FSfree(tmp_po);
 		    else
-			FSfree((char *) po);
+			FSfree(po);
 		    if (tmp_pd)
-			FSfree((char *) tmp_pd);
+			FSfree(tmp_pd);
 		    else
-			FSfree((char *) pd);
+			FSfree(pd);
 		    goto clearwire;
 		}
 		fhdr = tmp_fhdr;
@@ -184,25 +184,25 @@ FSListFontsWithXInfo(
 		if (!(fhdr = FSmalloc(sizeof(FSXFontInfoHeader *) * size)))
 		    goto clearwire;
 		if (!(flist = FSmalloc(sizeof(char *) * size))) {
-		    FSfree((char *) fhdr);
+		    FSfree(fhdr);
 		    goto clearwire;
 		}
 		if (!(pi = FSmalloc(sizeof(FSPropInfo *) * size))) {
-		    FSfree((char *) fhdr);
-		    FSfree((char *) flist);
+		    FSfree(fhdr);
+		    FSfree(flist);
 		    goto clearwire;
 		}
 		if (!(po = FSmalloc(sizeof(FSPropOffset *) * size))) {
-		    FSfree((char *) fhdr);
-		    FSfree((char *) flist);
-		    FSfree((char *) pi);
+		    FSfree(fhdr);
+		    FSfree(flist);
+		    FSfree(pi);
 		    goto clearwire;
 		}
 		if (!(pd = FSmalloc(sizeof(unsigned char *) * size))) {
-		    FSfree((char *) fhdr);
-		    FSfree((char *) flist);
-		    FSfree((char *) pi);
-		    FSfree((char *) po);
+		    FSfree(fhdr);
+		    FSfree(flist);
+		    FSfree(pi);
+		    FSfree(po);
 		    goto clearwire;
 		}
 	    }
@@ -229,7 +229,7 @@ FSListFontsWithXInfo(
 
 	pi[i] = FSmalloc(sizeof(FSPropInfo));
 	if (!pi[i]) {
-	    FSfree((char *) fhdr[i]);
+	    FSfree(fhdr[i]);
 	    goto badmem;
 	}
 	_FSReadPad(svr, (char *) &local_pi, SIZEOF(fsPropInfo));
@@ -243,15 +243,15 @@ FSListFontsWithXInfo(
 
 	po[i] = FSmalloc(pi[i]->num_offsets * sizeof(FSPropOffset));
 	if (!po[i]) {
-	    FSfree((char *) fhdr[i]);
-	    FSfree((char *) pi[i]);
+	    FSfree(fhdr[i]);
+	    FSfree(pi[i]);
 	    goto badmem;
 	}
 	pd[i] = FSmalloc(pi[i]->data_len);
 	if (!pd[i]) {
-	    FSfree((char *) fhdr[i]);
-	    FSfree((char *) pi[i]);
-	    FSfree((char *) po[i]);
+	    FSfree(fhdr[i]);
+	    FSfree(pi[i]);
+	    FSfree(po[i]);
 	    goto badmem;
 	}
 	/* get offsets */
@@ -300,22 +300,22 @@ FSListFontsWithXInfo(
 
 badmem:
     for (j = (i - 1); j >= 0; j--) {
-	FSfree((char *) pi[j]);
-	FSfree((char *) po[j]);
-	FSfree((char *) pd[j]);
+	FSfree(pi[j]);
+	FSfree(po[j]);
+	FSfree(pd[j]);
 	FSfree(flist[j]);
-	FSfree((char *) fhdr[j]);
+	FSfree(fhdr[j]);
     }
     if (flist)
-	FSfree((char *) flist);
+	FSfree(flist);
     if (fhdr)
-	FSfree((char *) fhdr);
+	FSfree(fhdr);
     if (pi)
-	FSfree((char *) pi);
+	FSfree(pi);
     if (po)
-	FSfree((char *) po);
+	FSfree(po);
     if (pd)
-	FSfree((char *) pd);
+	FSfree(pd);
 
 
 clearwire:

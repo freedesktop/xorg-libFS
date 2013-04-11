@@ -80,7 +80,7 @@ void _FSFreeServerStructure(FSServer *svr)
     if (svr->buffer)
 	FSfree(svr->buffer);
 
-    FSfree((char *) svr);
+    FSfree(svr);
 }
 
 static
@@ -180,7 +180,7 @@ FSOpenServer(const char *server)
 	alts[i].name = FSmalloc(altlen + 1);
 	if (!alts[i].name) {
 	    while (--i) {
-		FSfree((char *) alts[i].name);
+		FSfree(alts[i].name);
 	    }
 	    goto fail;
 	}
@@ -188,7 +188,7 @@ FSOpenServer(const char *server)
 	alts[i].name[altlen] = '\0';
 	ad += altlen + ((4 - (altlen + 2)) & 3);
     }
-    FSfree((char *) alt_data);
+    FSfree(alt_data);
     alt_data = NULL;
 
     svr->alternate_servers = alts;
@@ -260,9 +260,9 @@ FSOpenServer(const char *server)
     return (svr);
 
   fail: /* Failure: clean up and return null */
-    FSfree((char *) alts);
-    FSfree((char *) alt_data);
-    FSfree((char *) auth_data);
+    FSfree(alts);
+    FSfree(alt_data);
+    FSfree(auth_data);
     OutOfMemory(svr, setup);
     return (FSServer *) NULL;
 

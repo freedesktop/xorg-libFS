@@ -84,7 +84,7 @@ FSGetCatalogues(
 	c = FSmalloc(rlen + 1);
 	if ((!list) || (!c)) {
 	    if (list)
-		FSfree((char *) list);
+		FSfree(list);
 	    if (c)
 		FSfree(c);
 	    _FSEatData(svr, (unsigned long) rlen);

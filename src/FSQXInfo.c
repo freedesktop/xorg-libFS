@@ -103,7 +103,7 @@ FSQueryXInfo(
 	return FSBadAlloc;
     pdata = FSmalloc(props->data_len);
     if (!pdata) {
-	FSfree((char *) offset_data);
+	FSfree(offset_data);
 	return FSBadAlloc;
     }
     /* get offsets */

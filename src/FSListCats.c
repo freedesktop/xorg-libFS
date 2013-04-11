@@ -91,7 +91,7 @@ FSListCatalogues(
 
 	if ((!clist) || (!c)) {
 	    if (clist)
-		FSfree((char *) clist);
+		FSfree(clist);
 	    if (c)
 		FSfree(c);
 	    _FSEatData(svr, (unsigned long) rlen);
@@ -122,7 +122,7 @@ int FSFreeCatalogues(char **list)
 {
     if (list) {
 	FSfree(list[0] - 1);
-	FSfree((char *) list);
+	FSfree(list);
     }
     return 1;
 }
