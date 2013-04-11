@@ -85,9 +85,9 @@ FSListFonts(
 	&& rep.length <= (SIZE_MAX >> 2)
 #endif
 	) {
-	flist = (char **) FSmalloc((unsigned) rep.nFonts * sizeof(char *));
+	flist = FSmalloc(rep.nFonts * sizeof(char *));
 	rlen = (rep.length << 2) - SIZEOF(fsListFontsReply);
-	c = (char *) FSmalloc((unsigned) (rlen + 1));
+	c = FSmalloc(rlen + 1);
 
 	if ((!flist) || (!c)) {
 	    if (flist)

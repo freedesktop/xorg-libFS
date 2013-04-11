@@ -846,8 +846,7 @@ _FSEnq(
     if ((qelt = _FSqfree) != NULL) {
 	/* If _FSqfree is non-NULL do this, else malloc a new one. */
 	_FSqfree = qelt->next;
-    } else if ((qelt =
-	     (_FSQEvent *) FSmalloc((unsigned) sizeof(_FSQEvent))) == NULL) {
+    } else if ((qelt = FSmalloc(sizeof(_FSQEvent))) == NULL) {
 	/* Malloc call failed! */
 	ESET(ENOMEM);
 	(*_FSIOErrorFunction) (svr);
@@ -1105,7 +1104,7 @@ _FSAllocScratch(
 	if (svr->scratch_buffer != NULL)
 	    FSfree(svr->scratch_buffer);
 	return (svr->scratch_length = nbytes,
-		svr->scratch_buffer = FSmalloc((unsigned) nbytes));
+		svr->scratch_buffer = FSmalloc(nbytes));
     }
     return (svr->scratch_buffer);
 }

@@ -85,10 +85,9 @@ FSListCatalogues(
 	&& rep.length <= (SIZE_MAX>>2)
 #endif
 	) {
-	clist = (char **)
-	    FSmalloc((unsigned) rep.num_catalogues * sizeof(char *));
+	clist = FSmalloc(rep.num_catalogues * sizeof(char *));
 	rlen = (rep.length << 2) - SIZEOF(fsListCataloguesReply);
-	c = (char *) FSmalloc((unsigned) (rlen + 1));
+	c = FSmalloc(rlen + 1);
 
 	if ((!clist) || (!c)) {
 	    if (clist)

@@ -124,13 +124,12 @@ FSOpenServer(const char *server)
 	}
     }
 
-    if ((svr = (FSServer *) FScalloc(1, sizeof(FSServer))) == NULL) {
+    if ((svr = FScalloc(1, sizeof(FSServer))) == NULL) {
 	errno = ENOMEM;
 	return (FSServer *) NULL;
     }
 
-    if ((svr->server_name = FSmalloc((unsigned) (strlen(server) + 1)))
-	    == NULL) {
+    if ((svr->server_name = FSmalloc(strlen(server) + 1)) == NULL) {
 	goto fail;
     }
     (void) strcpy(svr->server_name, server);
@@ -159,7 +158,7 @@ FSOpenServer(const char *server)
     setuplength = prefix.alternate_len << 2;
     if (setuplength > (SIZE_MAX>>2)
 	|| (alt_data = (char *)
-	 (setup = FSmalloc((unsigned) setuplength))) == NULL) {
+	 (setup = FSmalloc(setuplength))) == NULL) {
 	goto fail;
     }
     _FSRead(svr, (char *) alt_data, setuplength);
@@ -171,15 +170,14 @@ FSOpenServer(const char *server)
     }
 #endif
 
-    alts = (AlternateServer *)
-	FSmalloc(sizeof(AlternateServer) * prefix.num_alternates);
+    alts = FSmalloc(sizeof(AlternateServer) * prefix.num_alternates);
     if (!alts) {
 	goto fail;
     }
     for (i = 0; i < prefix.num_alternates; i++) {
 	alts[i].subset = (Bool) *ad++;
 	altlen = (int) *ad++;
-	alts[i].name = (char *) FSmalloc(altlen + 1);
+	alts[i].name = FSmalloc(altlen + 1);
 	if (!alts[i].name) {
 	    while (--i) {
 		FSfree((char *) alts[i].name);
@@ -199,7 +197,7 @@ FSOpenServer(const char *server)
     setuplength = prefix.auth_len << 2;
     if (setuplength > (SIZE_MAX>>2)
 	|| (auth_data = (char *)
-	 (setup = FSmalloc((unsigned) setuplength))) == NULL) {
+	 (setup = FSmalloc(setuplength))) == NULL) {
 	goto fail;
     }
     _FSRead(svr, (char *) auth_data, setuplength);
@@ -212,8 +210,7 @@ FSOpenServer(const char *server)
     /* get rest */
     _FSRead(svr, (char *) &conn, (long) SIZEOF(fsConnSetupAccept));
 
-    if ((vendor_string = (char *)
-	 FSmalloc((unsigned) conn.vendor_len + 1)) == NULL) {
+    if ((vendor_string = FSmalloc(conn.vendor_len + 1)) == NULL) {
 	goto fail;
     }
     _FSReadPad(svr, (char *) vendor_string, conn.vendor_len);
