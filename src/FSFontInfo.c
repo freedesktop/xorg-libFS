@@ -68,10 +68,10 @@ FSListFontsWithXInfo(
     int         i,
                 j;
     size_t      size = 0;
-    FSXFontInfoHeader **fhdr = (FSXFontInfoHeader **) 0;
-    FSPropInfo **pi = (FSPropInfo **) 0;
-    FSPropOffset **po = (FSPropOffset **) 0;
-    unsigned char **pd = (unsigned char **) 0;
+    FSXFontInfoHeader **fhdr = (FSXFontInfoHeader **) NULL;
+    FSPropInfo **pi = (FSPropInfo **) NULL;
+    FSPropOffset **po = (FSPropOffset **) NULL;
+    unsigned char **pd = (unsigned char **) NULL;
     char      **flist = NULL;
     fsListFontsWithXInfoReply reply;
     fsListFontsWithXInfoReq *req;

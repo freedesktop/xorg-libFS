@@ -77,7 +77,7 @@ FSListFonts(
     _FSSend(svr, pattern, nbytes);
     if (!_FSReply(svr, (fsReply *) & rep,
 	  (SIZEOF(fsListFontsReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return (char **) 0;
+	return (char **) NULL;
 
     if (rep.nFonts
 #if (SIZE_MAX >> 2) <= UINT_MAX

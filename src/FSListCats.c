@@ -77,7 +77,7 @@ FSListCatalogues(
     _FSSend(svr, pattern, nbytes);
     if (!_FSReply(svr, (fsReply *) & rep,
     (SIZEOF(fsListCataloguesReply) - SIZEOF(fsGenericReply)) >> 2, fsFalse))
-	return (char **) 0;
+	return (char **) NULL;
 
     if (rep.num_catalogues
 #if (SIZE_MAX >> 2) <= UINT_MAX
