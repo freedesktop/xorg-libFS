@@ -111,10 +111,10 @@ FSOpenServer(const char *server)
     char       *setup = NULL;
     fsConnSetupAccept conn;
     char       *auth_data = NULL;
-    char       *alt_data = NULL,
+    unsigned char *alt_data = NULL,
                *ad;
     AlternateServer *alts = NULL;
-    int         altlen;
+    unsigned int altlen;
     char       *vendor_string;
     unsigned long        setuplength;
 
@@ -157,7 +157,7 @@ FSOpenServer(const char *server)
 
     setuplength = prefix.alternate_len << 2;
     if (setuplength > (SIZE_MAX>>2)
-	|| (alt_data = (char *)
+	|| (alt_data = (unsigned char *)
 	 (setup = FSmalloc(setuplength))) == NULL) {
 	goto fail;
     }
@@ -176,7 +176,7 @@ FSOpenServer(const char *server)
     }
     for (i = 0; i < prefix.num_alternates; i++) {
 	alts[i].subset = (Bool) *ad++;
-	altlen = (int) *ad++;
+	altlen = (unsigned int) *ad++;
 	alts[i].name = FSmalloc(altlen + 1);
 	if (!alts[i].name) {
 	    while (--i) {
