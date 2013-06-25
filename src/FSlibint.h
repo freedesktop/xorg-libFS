@@ -136,7 +136,7 @@ extern FSServer *_FSHeadOfServerList;
 #endif				/* WORD64 */
 
 /*
- * GetReq - Get the next avilable FS request packet in the buffer and
+ * GetReq - Get the next available FS request packet in the buffer and
  * return it.
  *
  * "name" is the name of the request, e.g. InternAtom, OpenFont, etc.

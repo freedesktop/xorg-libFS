@@ -683,7 +683,7 @@ _FSReply(
     register fsReply	*rep,
     int			 extra,	 /* number of 32-bit words expected after the
 				  * reply */
-    Bool		 discard)/* should I discard data followind "extra"
+    Bool		 discard)/* should I discard data following "extra"
 				  * words? */
 {
     /*
