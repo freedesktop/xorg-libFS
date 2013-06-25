@@ -144,7 +144,6 @@ extern FSServer *_FSHeadOfServerList;
  *
  */
 
-#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetReq(name, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req)) > svr->bufmax)\
@@ -155,23 +154,9 @@ extern FSServer *_FSHeadOfServerList;
 	svr->bufptr += SIZEOF(fs##name##Req);\
 	svr->request++
 
-#else				/* non-ANSI C uses empty comment instead of
-				 * "##" for token concatenation */
-#define GetReq(name, req) \
-        WORD64ALIGN\
-	if ((svr->bufptr + SIZEOF(fs/**/name/**/Req)) > svr->bufmax)\
-		_FSFlush(svr);\
-	req = (fs/**/name/**/Req *)(svr->last_req = svr->bufptr);\
-	req->reqType = FS_/**/name;\
-	req->length = (SIZEOF(fs/**/name/**/Req))>>2;\
-	svr->bufptr += SIZEOF(fs/**/name/**/Req);\
-	svr->request++
-#endif
-
 /* GetReqExtra is the same as GetReq, but allocates "n" additional
    bytes after the request. "n" must be a multiple of 4!  */
 
-#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetReqExtra(name, n, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req) + n) > svr->bufmax)\
@@ -181,18 +166,6 @@ extern FSServer *_FSHeadOfServerList;
 	req->length = (SIZEOF(fs##name##Req) + n)>>2;\
 	svr->bufptr += SIZEOF(fs##name##Req) + n;\
 	svr->request++
-#else
-#define GetReqExtra(name, n, req) \
-        WORD64ALIGN\
-	if ((svr->bufptr + SIZEOF(fs/**/name/**/Req) + n) > svr->bufmax)\
-		_FSFlush(svr);\
-	req = (fs/**/name/**/Req *)(svr->last_req = svr->bufptr);\
-	req->reqType = FS_/**/name;\
-	req->length = (SIZEOF(fs/**/name/**/Req) + n)>>2;\
-	svr->bufptr += SIZEOF(fs/**/name/**/Req) + n;\
-	svr->request++
-#endif
-
 
 /*
  * GetResReq is for those requests that have a resource ID
@@ -200,7 +173,6 @@ extern FSServer *_FSHeadOfServerList;
  * "rid" is the name of the resource.
  */
 
-#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetResReq(name, rid, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax)\
@@ -211,25 +183,12 @@ extern FSServer *_FSHeadOfServerList;
 	req->id = (rid);\
 	svr->bufptr += SIZEOF(fsResourceReq);\
 	svr->request++
-#else
-#define GetResReq(name, rid, req) \
-        WORD64ALIGN\
-	if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax)\
-	    _FSFlush(svr);\
-	req = (fsResourceReq *) (svr->last_req = svr->bufptr);\
-	req->reqType = FS_/**/name;\
-	req->length = 2;\
-	req->id = (rid);\
-	svr->bufptr += SIZEOF(fsResourceReq);\
-	svr->request++
-#endif
 
 /*
  * GetEmptyReq is for those requests that have no arguments
  * at all.
  */
 
-#if !defined(UNIXCPP) || defined(ANSICPP)
 #define GetEmptyReq(name, req) \
         WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax)\
@@ -239,17 +198,6 @@ extern FSServer *_FSHeadOfServerList;
 	req->length = 1;\
 	svr->bufptr += SIZEOF(fsReq);\
 	svr->request++
-#else
-#define GetEmptyReq(name, req) \
-        WORD64ALIGN\
-	if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax)\
-	    _FSFlush(svr);\
-	req = (fsReq *) (svr->last_req = svr->bufptr);\
-	req->reqType = FS_/**/name;\
-	req->length = 1;\
-	svr->bufptr += SIZEOF(fsReq);\
-	svr->request++
-#endif
 
 #define	SyncHandle()	\
 	if (svr->synchandler) (*svr->synchandler)(svr)
@@ -339,11 +287,7 @@ extern void Data();
 				 * don't line up with proto */
 
 
-#if !defined(UNIXCPP) || defined(ANSICPP)
 #define FSCat(x,y) x##_##y
-#else
-#define FSCat(x,y) x/**/_/**/y
-#endif
 
 /* copy XCharInfo parts of a protocol reply into a FSXCharInfo */
 
