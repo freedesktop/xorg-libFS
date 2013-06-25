@@ -113,27 +113,6 @@ extern FSServer *_FSHeadOfServerList;
 #define	FSlibServerIOError	(1L << 0)
 #define	FSlibServerClosing	(1L << 1)
 
-/*   Need to start requests on 64 bit word boundries
- *   on a CRAY computer so add a NoOp (127) if needed.
- *   A character pointer on a CRAY computer will be non-zero
- *   after shifting right 61 bits of it is not pointing to
- *   a word boundary.
- */
-
-#ifdef WORD64
-#define WORD64ALIGN if ((long)svr->bufptr >> 61) {\
-           svr->last_req = svr->bufptr;\
-           *(svr->bufptr)   = FS_Noop;\
-           *(svr->bufptr+1) =  0;\
-           *(svr->bufptr+2) =  0;\
-           *(svr->bufptr+3) =  1;\
-             svr->request += 1;\
-             svr->bufptr += 4;\
-         }
-#else				/* else does not require alignment on 64-bit
-				 * boundaries */
-#define WORD64ALIGN
-#endif				/* WORD64 */
 
 /*
  * GetReq - Get the next available FS request packet in the buffer and
@@ -145,7 +124,6 @@ extern FSServer *_FSHeadOfServerList;
  */
 
 #define GetReq(name, req) \
-        WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req)) > svr->bufmax)\
 		_FSFlush(svr);\
 	req = (fs##name##Req *)(svr->last_req = svr->bufptr);\
@@ -158,7 +136,6 @@ extern FSServer *_FSHeadOfServerList;
    bytes after the request. "n" must be a multiple of 4!  */
 
 #define GetReqExtra(name, n, req) \
-        WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fs##name##Req) + n) > svr->bufmax)\
 		_FSFlush(svr);\
 	req = (fs##name##Req *)(svr->last_req = svr->bufptr);\
@@ -174,7 +151,6 @@ extern FSServer *_FSHeadOfServerList;
  */
 
 #define GetResReq(name, rid, req) \
-        WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsResourceReq)) > svr->bufmax)\
 	    _FSFlush(svr);\
 	req = (fsResourceReq *) (svr->last_req = svr->bufptr);\
@@ -190,7 +166,6 @@ extern FSServer *_FSHeadOfServerList;
  */
 
 #define GetEmptyReq(name, req) \
-        WORD64ALIGN\
 	if ((svr->bufptr + SIZEOF(fsReq)) > svr->bufmax)\
 	    _FSFlush(svr);\
 	req = (fsReq *) (svr->last_req = svr->bufptr);\
@@ -248,33 +223,17 @@ extern void Data();
 /*
  * provide emulation routines for smaller architectures
  */
-#ifndef WORD64
 #define Data16(dpy, data, len) Data((dpy), (char *)(data), (len))
 #define Data32(dpy, data, len) Data((dpy), (char *)(data), (len))
 #define _FSRead16Pad(dpy, data, len) _FSReadPad((dpy), (char *)(data), (len))
 #define _FSRead16(dpy, data, len) _FSRead((dpy), (char *)(data), (len))
 #define _FSRead32(dpy, data, len) _FSRead((dpy), (char *)(data), (len))
-#endif /* not WORD64 */
 
 #define PackData16(dpy,data,len) Data16 (dpy, data, len)
 #define PackData32(dpy,data,len) Data32 (dpy, data, len)
 
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 #define max(a,b) (((a) > (b)) ? (a) : (b))
-
-#ifdef MUSTCOPY
-/* a little bit of magic */
-#define OneDataCard32(svr,dstaddr,srcvar) \
-  { svr->bufptr -= 4; Data32 (svr, (char *) &(srcvar), 4); }
-
-#define STARTITERATE(tpvar,type,start,endcond,decr) \
-  { register char *cpvar; \
-  for (cpvar = (char *) start; endcond; cpvar = NEXTPTR(cpvar,type), decr) { \
-    type dummy; memmove ((char *) &dummy, cpvar, SIZEOF(type)); \
-    tpvar = (type *) cpvar;
-#define ENDITERATE }}
-
-#else
 
 /* srcvar must be a variable for large architecture version */
 #define OneDataCard32(svr,dstaddr,srcvar) \
@@ -283,8 +242,6 @@ extern void Data();
 #define STARTITERATE(tpvar,type,start,endcond,decr) \
   for (tpvar = (type *) start; endcond; tpvar++, decr) {
 #define ENDITERATE }
-#endif				/* MUSTCOPY - used machines whose C structs
-				 * don't line up with proto */
 
 
 #define FSCat(x,y) x##_##y
