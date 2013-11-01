@@ -58,6 +58,7 @@ in this Software without prior written authorization from The Open Group.
 #endif
 #include <stdio.h>
 #include "FSlibint.h"
+#include <X11/Xtrans/Xtransint.h>
 #include <X11/Xos.h>
 
 static void _EatData32 ( FSServer *svr, unsigned long n );
@@ -360,7 +361,7 @@ _FSReadPad(
     size += iov[1].iov_len;
 
     ESET(0);
-    while ((bytes_read = _FSTransReadv(svr->trans_conn, iov, 2)) != size) {
+    while ((bytes_read = readv(svr->trans_conn->fd, iov, 2)) != size) {
 
 	if (bytes_read > 0) {
 	    size -= bytes_read;
