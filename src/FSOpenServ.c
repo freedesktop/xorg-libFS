@@ -66,7 +66,7 @@ static fsReq _dummy_request = {
     0, 0, 0
 };
 
-static void OutOfMemory ( FSServer *svr, char *setup );
+static void OutOfMemory ( FSServer *svr );
 
 FSServer   *_FSHeadOfServerList = NULL;
 
@@ -85,13 +85,11 @@ void _FSFreeServerStructure(FSServer *svr)
 
 static
 void OutOfMemory(
-    FSServer	*svr,
-    char	*setup)
+    FSServer	*svr)
 {
     if (svr->trans_conn)
 	_FSDisconnectServer(svr->trans_conn);
     _FSFreeServerStructure(svr);
-    FSfree(setup);
     errno = ENOMEM;
 }
 
@@ -263,7 +261,7 @@ FSOpenServer(const char *server)
     FSfree(alts);
     FSfree(alt_data);
     FSfree(auth_data);
-    OutOfMemory(svr, setup);
+    OutOfMemory(svr);
     return (FSServer *) NULL;
 
 }
