@@ -179,7 +179,7 @@ FSOpenServer(const char *server)
 	altlen = (unsigned int) *ad++;
 	alts[i].name = FSmalloc(altlen + 1);
 	if (!alts[i].name) {
-	    while (--i) {
+	    while (--i >= 0) {
 		FSfree(alts[i].name);
 	    }
 	    goto fail;
