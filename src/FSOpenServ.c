@@ -127,10 +127,9 @@ FSOpenServer(const char *server)
 	return (FSServer *) NULL;
     }
 
-    if ((svr->server_name = FSmalloc(strlen(server) + 1)) == NULL) {
+    if ((svr->server_name = strdup(server)) == NULL) {
 	goto fail;
     }
-    (void) strcpy(svr->server_name, server);
 
     if ((svr->trans_conn = _FSConnectServer(svr->server_name)) == NULL) {
 	goto fail;
