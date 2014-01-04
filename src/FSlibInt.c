@@ -1034,57 +1034,6 @@ _FSFreeQ(void)
     return;
 }
 
-#ifdef _POSIX_SOURCE                     /* stupid makedepend [need if] */
-#ifndef __QNX__ /* QNX's uname nodename entry is not same as tcpip hostname */
-#define NEED_UTSNAME
-#endif
-#endif
-#ifdef hpux
-#define NEED_UTSNAME
-#endif
-#ifdef SVR4
-#ifndef _SEQUENT_
-#define NEED_UTSNAME
-#endif
-#endif
-
-#ifdef NEED_UTSNAME
-#include <sys/utsname.h>
-#endif
-
-
-/*
- * _FSGetHostname - similar to gethostname but allows special processing.
- */
-int
-_FSGetHostname(
-    char	*buf,
-    int		 maxlen)
-{
-    int         len;
-
-#ifdef NEED_UTSNAME
-    /*
-     * same host name crock as in server and xinit.
-     */
-    struct utsname name;
-
-    uname(&name);
-    len = strlen(name.nodename);
-    if (len >= maxlen)
-	len = maxlen - 1;
-    strncpy(buf, name.nodename, len);
-    buf[len] = '\0';
-#else
-    buf[0] = '\0';
-    (void) gethostname(buf, maxlen);
-    buf[maxlen - 1] = '\0';
-    len = strlen(buf);
-#endif				/* NEED_UTSNAME */
-
-    return len;
-}
-
 #ifndef _FSANYSET
 /*
  * This is not always a macro.

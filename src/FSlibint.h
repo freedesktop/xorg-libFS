@@ -95,7 +95,6 @@ extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event,
 extern int _FSDefaultError ( FSServer *svr, FSErrorEvent *event );
 extern char * _FSAllocScratch ( FSServer *svr, unsigned long nbytes );
 extern void _FSFreeQ ( void );
-extern int _FSGetHostname ( char *buf, int maxlen );
 
 extern FSErrorHandler  FSSetErrorHandler ( FSErrorHandler handler );
 extern FSIOErrorHandler FSSetIOErrorHandler ( FSIOErrorHandler handler );
