@@ -96,8 +96,6 @@ int FSGetErrorText(
     char		*buffer,
     int			 nbytes)
 {
-
-    const char *defaultp = NULL;
     char        buf[32];
     register _FSExtension *ext;
 
@@ -105,7 +103,7 @@ int FSGetErrorText(
 	return 0;
     snprintf(buf, sizeof(buf), "%d", code);
     if (code < (FSErrorListSize / sizeof(char *)) && code >= 0) {
-	defaultp = FSErrorList[code];
+	const char *defaultp = FSErrorList[code];
 	FSGetErrorDatabaseText(svr, "FSProtoError", buf, defaultp, buffer, nbytes);
     }
     ext = svr->ext_procs;
