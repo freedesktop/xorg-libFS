@@ -87,7 +87,6 @@ extern unsigned long _FSSetLastRequestRead ( FSServer *svr,
 extern int _FSUnknownWireEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
 extern int _FSUnknownNativeEvent ( FSServer *svr, FSEvent *re,
 				   fsEvent *event );
-extern int _FSWireToEvent ( FSServer *svr, FSEvent *re, fsEvent *event );
 extern int _FSDefaultIOError ( FSServer *svr ) _X_NORETURN;
 extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event,
 				  FILE *fp );

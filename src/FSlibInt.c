@@ -746,35 +746,6 @@ _FSUnknownNativeEvent(
     return (0);
 }
 
-/*
- * reformat a wire event into an FSEvent structure of the right type.
- */
-Bool
-_FSWireToEvent(
-    register FSServer	*svr,	/* pointer to display structure */
-    register FSEvent	*re,	/* pointer to where event should be
-				 * reformatted */
-    register fsEvent	*event)	/* wire protocol event */
-{
-
-    re->type = event->type & 0x7f;
-    ((FSAnyEvent *) re)->serial = _FSSetLastRequestRead(svr,
-						   (fsGenericReply *) event);
-    ((FSAnyEvent *) re)->send_event = ((event->type & 0x80) != 0);
-    ((FSAnyEvent *) re)->server = svr;
-
-    /*
-     * Ignore the leading bit of the event type since it is set when a client
-     * sends an event rather than the server.
-     */
-
-    switch (event->type & 0177) {
-    default:
-	return (_FSUnknownWireEvent(svr, re, event));
-    }
-}
-
-
 static const char *
 _SysErrorMsg(int n)
 {
