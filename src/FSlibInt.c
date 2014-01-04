@@ -850,7 +850,11 @@ _FSPrintDefaultError(
 		ext && (ext->codes.major_opcode != event->request_code);
 		ext = ext->next);
 	if (ext)
+#ifdef HAVE_STRLCPY
+	    strlcpy(buffer, ext->name, sizeof(buffer));
+#else
 	    strcpy(buffer, ext->name);
+#endif
 	else
 	    buffer[0] = '\0';
     }

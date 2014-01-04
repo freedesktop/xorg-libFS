@@ -84,9 +84,14 @@ int FSGetErrorDatabaseText(
 {
     if (nbytes == 0)
 	return 0;
+#ifdef HAVE_STRLCPY
+    if (strlcpy(buffer, defaultp, nbytes) >= nbytes)
+	return 0;
+#else
     (void) strncpy(buffer, defaultp, nbytes);
     if ((strlen(defaultp) + 1) > nbytes)
 	buffer[nbytes - 1] = '\0';
+#endif
     return 1;
 }
 

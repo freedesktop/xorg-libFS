@@ -51,6 +51,9 @@ PKG_CHECK_MODULES(FS, xproto >= 7.0.17 fontsproto xtrans)
 # Find needed libraries for TCP sockets (pre-pended in $LIBS)
 XTRANS_CONNECTION_FLAGS
 
+# Checks for library functions.
+AC_CHECK_FUNCS([strlcpy])
+
 # Allow checking code with lint, sparse, etc.
 XORG_WITH_LINT
 XORG_LINT_LIBRARY([FS])
