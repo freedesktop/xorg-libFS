@@ -82,7 +82,6 @@ extern int _FSReply ( FSServer *svr, fsReply *rep, int extra, int discard );
 extern XtransConnInfo _FSConnectServer ( char *server_name );
 extern void _FSDisconnectServer ( XtransConnInfo trans_conn );
 extern void _FSSendClientPrefix ( FSServer *svr, fsConnClientPrefix *client );
-extern int _FSEventsQueued ( FSServer *svr, int mode );
 extern unsigned long _FSSetLastRequestRead ( FSServer *svr,
 					     fsGenericReply *rep );
 extern int _FSUnknownWireEvent ( FSServer *svr, FSEvent *re, fsEvent *event );

@@ -176,42 +176,6 @@ _FSFlush(register FSServer *svr)
     svr->last_req = (char *) &_dummy_request;
 }
 
-int
-_FSEventsQueued(
-    register FSServer	*svr,
-    int			 mode)
-{
-    register BytesReadable_t len;
-    BytesReadable_t pend;
-    char        buf[BUFSIZE];
-    register fsReply *rep;
-
-    if (mode == QueuedAfterFlush) {
-	_FSFlush(svr);
-	if (svr->qlen)
-	    return (svr->qlen);
-    }
-    if (_FSTransBytesReadable(svr->trans_conn, &pend) < 0)
-	(*_FSIOErrorFunction) (svr);
-    if ((len = pend) < SIZEOF(fsReply))
-	return (svr->qlen);	/* _FSFlush can enqueue events */
-    else if (len > BUFSIZE)
-	len = BUFSIZE;
-    len /= SIZEOF(fsReply);
-    pend = len * SIZEOF(fsReply);
-    _FSRead(svr, buf, (long) pend);
-
-    /* no space between comma and type or else macro will die */
-    STARTITERATE(rep, fsReply, buf, (len > 0), len--) {
-	if (rep->generic.type == FS_Error)
-	    _FSError(svr, (fsError *) rep);
-	else			/* must be an event packet */
-	    _FSEnq(svr, (fsEvent *) rep);
-    }
-    ENDITERATE
-	return (svr->qlen);
-}
-
 /* _FSReadEvents - Flush the output queue,
  * then read as many events as possible (but at least 1) and enqueue them
  */
