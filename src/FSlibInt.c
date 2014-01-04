@@ -964,25 +964,6 @@ _FSDefaultError(
 FSIOErrorHandler _FSIOErrorFunction = _FSDefaultIOError;
 FSErrorHandler _FSErrorFunction = _FSDefaultError;
 
-/*
- * This routine can be used to (cheaply) get some memory within a single
- * Xlib routine for scratch space.  It is reallocated from the same place
- * each time, unless the library needs a large scratch space.
- */
-char       *
-_FSAllocScratch(
-    register FSServer	*svr,
-    unsigned long	 nbytes)
-{
-    if (nbytes > svr->scratch_length) {
-	if (svr->scratch_buffer != NULL)
-	    FSfree(svr->scratch_buffer);
-	return (svr->scratch_length = nbytes,
-		svr->scratch_buffer = FSmalloc(nbytes));
-    }
-    return (svr->scratch_buffer);
-}
-
 int
 FSFree(char *data)
 {

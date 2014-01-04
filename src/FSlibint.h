@@ -93,7 +93,6 @@ extern int _FSDefaultIOError ( FSServer *svr ) _X_NORETURN;
 extern int _FSPrintDefaultError ( FSServer *svr, FSErrorEvent *event,
 				  FILE *fp );
 extern int _FSDefaultError ( FSServer *svr, FSErrorEvent *event );
-extern char * _FSAllocScratch ( FSServer *svr, unsigned long nbytes );
 extern void _FSFreeQ ( void );
 
 extern FSErrorHandler  FSSetErrorHandler ( FSErrorHandler handler );
