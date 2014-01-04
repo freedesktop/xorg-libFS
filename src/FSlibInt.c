@@ -66,11 +66,14 @@ static const char * _SysErrorMsg ( int n );
 
 /* check for both EAGAIN and EWOULDBLOCK, because some supposedly POSIX
  * systems are broken and return EWOULDBLOCK when they should return EAGAIN
+ *
+ * Solaris defines EWOULDBLOCK to be EAGAIN, so don't need to check twice
+ * for it.
  */
 #ifdef WIN32
 #define ETEST() (WSAGetLastError() == WSAEWOULDBLOCK)
 #else
-#if defined(EAGAIN) && defined(EWOULDBLOCK)
+#if defined(EAGAIN) && defined(EWOULDBLOCK) && (EAGAIN != EWOULDBLOCK)
 #define ETEST() (errno == EAGAIN || errno == EWOULDBLOCK)
 #else
 #ifdef EAGAIN
