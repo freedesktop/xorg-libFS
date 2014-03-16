@@ -22,7 +22,7 @@
 
 # Initialize Autoconf
 AC_PREREQ([2.60])
-AC_INIT([libFS], [1.0.5],
+AC_INIT([libFS], [1.0.6],
         [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg], [libFS])
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_HEADERS([config.h])
