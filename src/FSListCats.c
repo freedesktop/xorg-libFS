@@ -57,7 +57,7 @@ in this Software without prior written authorization from The Open Group.
 char      **
 FSListCatalogues(
     FSServer	*svr,
-    char	*pattern,
+    const char	*pattern,
     int		 maxNames,
     int		*actualCount)
 {

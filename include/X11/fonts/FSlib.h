@@ -252,7 +252,7 @@ extern char ** FSListExtensions ( FSServer *svr, int *next );
 extern int FSQueryExtension ( FSServer *svr, char *name, int *major_opcode,
 			      int *first_event, int *first_error );
 
-extern char ** FSListCatalogues ( FSServer *svr, char *pattern,
+extern char ** FSListCatalogues ( FSServer *svr, const char *pattern,
 				  int maxNames, int *actualCount );
 extern char ** FSGetCatalogues ( FSServer *svr, int *num );
 
