@@ -316,7 +316,7 @@ _FSReadPad(
 
     if (size == 0)
 	return;
-    iov[0].iov_len = (int) size;
+    iov[0].iov_len = size;
     iov[0].iov_base = data;
     /*
      * The following hack is used to provide 32 bit long-word aligned padding.
