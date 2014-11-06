@@ -68,14 +68,12 @@ in this Software without prior written authorization from The Open Group.
 
 #ifndef FS_OPEN_MAX
 
-#ifndef X_NOT_POSIX
 #ifdef _POSIX_SOURCE
 #include <limits.h>
 #else
 #define _POSIX_SOURCE
 #include <limits.h>
 #undef _POSIX_SOURCE
-#endif
 #endif
 #ifndef SIZE_MAX
 # ifdef ULONG_MAX
